@@ -45,7 +45,7 @@ namespace ShirlyStudio.Areas.Identity.Pages.Account
         {
             [Required]
             [EmailAddress]
-            [Display(Name = "כתובת מייל")]
+            [Display(Name = "אימייל")]
             public string Email { get; set; }
 
             [Required]

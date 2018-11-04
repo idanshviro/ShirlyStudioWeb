@@ -26,8 +26,8 @@
 }
 
 #logo-home {
-    width: 200px;
-    height: 140px;
+    width: 150px;
+    height: 100px;
 }
 
 .control-label {
@@ -40,6 +40,8 @@ text-align:center;
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    position: absolute;
+    left: 25%;
 }
 #contact {
   
