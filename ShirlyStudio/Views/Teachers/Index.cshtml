@@ -1,0 +1,36 @@
+﻿@model IEnumerable<WebApplication4.Models.Teacher>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout-page.cshtml";
+}
+
+<h2>רשימת המורים</h2>
+
+<p>
+    <a asp-action="Create">הוספת מורה חדש</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TeacherName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TeacherName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.TeacherId">עריכה</a> |
+                <a asp-action="Details" asp-route-id="@item.TeacherId">פרטים</a> |
+                <a asp-action="Delete" asp-route-id="@item.TeacherId">מחיקה</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

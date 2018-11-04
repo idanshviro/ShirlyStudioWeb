@@ -1,0 +1,27 @@
+﻿@model ShirlyStudio.Models.Category
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout-page.cshtml";
+}
+
+<h2>מחיקת קטגוריה</h2>
+
+<h3>האם אתה בטוח כי ברצונך למחוק את הקטגוריה הבאה?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CategoryName)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="CategoryId" />
+        <input type="submit" value="מחק קטגוריה" class="btn btn-default" /> |
+        <a asp-action="Index">חזרה לרשימת הקטגוריות</a>
+    </form>
+</div>

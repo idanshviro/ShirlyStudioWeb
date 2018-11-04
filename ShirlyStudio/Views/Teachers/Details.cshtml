@@ -1,0 +1,25 @@
+﻿@model WebApplication4.Models.Teacher
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout-page.cshtml";
+}
+
+<h2>פרטי מורה</h2>
+
+<div>
+    <h4>Teacher</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TeacherName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TeacherName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.TeacherId">עריכה</a> |
+    <a asp-action="Index">חזרה לרשימת המורים</a>
+</div>

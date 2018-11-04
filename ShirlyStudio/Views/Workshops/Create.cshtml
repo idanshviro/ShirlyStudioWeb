@@ -1,0 +1,66 @@
+﻿@model WebApplication4.Models.Workshop
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout-page.cshtml";
+}
+
+
+<h4>הוספת סדנה</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="WorkshopName" class="control-label"></label>
+                <input asp-for="WorkshopName" class="form-control" />
+                <span asp-validation-for="WorkshopName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="FullData" class="control-label"></label>
+                <input asp-for="FullData" class="form-control" />
+                <span asp-validation-for="FullData" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Available_Members" class="control-label"></label>
+                <input asp-for="Available_Members" class="form-control" />
+                <span asp-validation-for="Available_Members" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TeacherId" class="control-label"></label>
+                <select asp-for="TeacherId" class ="form-control" asp-items="ViewBag.TeacherId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Duration" class="control-label"></label>
+                <input asp-for="Duration" class="form-control" />
+                <span asp-validation-for="Duration" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="צור סדנה" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">חזרה לרשימת הסדנאות</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

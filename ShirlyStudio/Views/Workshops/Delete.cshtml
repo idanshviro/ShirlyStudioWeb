@@ -1,0 +1,70 @@
+﻿@model WebApplication4.Models.Workshop
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout-page.cshtml";
+}
+
+<h2>מחיקת סדנה</h2>
+
+<h3>האם אתה בטוח כי ברצונך למחוק את הסדנה הבאה?</h3>
+<div>
+    <h4>Workshop</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkshopName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WorkshopName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.CategoryName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FullData)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FullData)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Available_Members)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Available_Members)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Teacher)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Teacher.TeacherName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Duration)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Duration)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="WorkshopId" />
+        <input type="submit" value="מחיקת סדנה" class="btn btn-default" /> |
+        <a asp-action="Index">חזרה לרשימת הסדנאות</a>
+    </form>
+</div>

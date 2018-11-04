@@ -1,0 +1,67 @@
+﻿@model WebApplication4.Models.Workshop
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout-page.cshtml";
+}
+
+<h2>פרטי הסדנה</h2>
+
+<div>
+    <h4>Workshop</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkshopName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WorkshopName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.CategoryName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FullData)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FullData)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Available_Members)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Available_Members)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Teacher)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Teacher.TeacherName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Duration)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Duration)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.WorkshopId">עריכה</a> |
+    <a asp-action="Index">חזרה לרשימת הסדנאות</a>
+</div>
