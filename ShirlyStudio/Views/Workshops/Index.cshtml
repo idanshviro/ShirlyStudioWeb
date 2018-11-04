@@ -7,6 +7,7 @@
 
 <script src="https://d3js.org/d3.v3.min.js"></script>‏
 <script src="~/vendor/bootstrap/js/bootstrap.min.js"></script>
+<link href="~/css/index.css" rel="stylesheet" />
 
 <script src="~/js/jquery-3.3.1.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -137,7 +138,7 @@
                     var lables = [];
                     var price = [];
                     for (i in data) {
-                        lables.push(data[i].name);
+                        lables.push(data[i].workshopName);
                         price.push(data[i].price);
 
                     }
@@ -260,11 +261,11 @@
                 url: "/Workshops/Getfreeplace",
                 success: function (data) {
                     //     console.log(data);
-                    //  var ctx = document.getElementById('myChart2').getContext('2d');
+                    // var ctx = document.getElementById('myChart2').getContext('2d');
                     var lables = [];
                     var ams = [];
                     for (i in data) {
-                        lables.push(data[i].name);
+                        lables.push(data[i].workshopName);
                         ams.push(data[i].available_Members);
                     }
 
