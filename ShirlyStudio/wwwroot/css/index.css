@@ -1,0 +1,56 @@
+﻿
+body {
+    margin: 40px 10px;
+    padding: 0;
+    font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+    font-size: 14px;
+}
+
+#calendar {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.gragh-test {
+    position: absolute;
+    height: 300px;
+    width: 300px;
+}
+
+
+/* CSS that makes chart responsive */
+#chart {
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    float: right;
+}
+
+#svg-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.svg-content-responsive {
+    position: center;
+    top: 0;
+    left: 0;
+}
+/* CSS that styles the chart */
+rect {
+    fill: steelblue;
+}
+
+    rect:hover {
+        fill: brown;
+    }
+
+.axis text {
+    font: 14px sans-serif;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+}
