@@ -15,6 +15,7 @@
 <script src='~/js/moment.min.js'></script>
 <script src='~/js/fullcalendar.js'></script>
 <script>jq223 = jQuery.noConflict(false)</script>
+<script src="~/js/jquery-3.3.1.js"></script>
 
 <header class="masthead text-center text-white d-flex">
     <div class="container my-auto">
@@ -50,6 +51,49 @@
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h2 class="section-heading">רשימת סדנאות</h2>
+
+                @* This is a web service weather *@
+                <div id="showWeatherForcast"></div>
+                <script type="text/javascript">
+
+
+                    $(document).ready(function () {
+
+
+                        var city = 'rishon lezion';
+                        var key = 'f5a9dcc0f6833e86ac420e23ee102d20';
+                        $.ajax({
+                            url: 'http://api.openweathermap.org/data/2.5/weather',
+                            dataType: 'json',
+                            type: 'GET',
+                            data: { q: city, appid: key, units: 'metric' },
+
+                            success: function (data) {
+                                var wf = '';
+                                $.each(data.weather, function (index, val) {
+                                    wf += '<p><b>' + data.name + "</b><img src= http://openweathermap.org/img/w/" + val.icon + ".png></p>" +
+                                        data.main.temp + '&deg;C ' + ' | ' + val.main + ',' + val.description
+                                    if (val.description == "moderate rain" || val.description == "shower rain" || val.description == "rain" || val.description == "thunderstorm" || val.description == "snow" || val.description == "mist" || val.description == "thunderstorm with rain") {
+                                        wf += '  - Due to an extreame weather no class for today :( ';
+
+                                    }
+                                    else { wf += '  - A wondarful weather for art ! :)' }
+                                });
+                                $("#showWeatherForcast").html(wf);
+                            }
+
+
+                        })
+
+
+                    }
+                    )
+
+
+
+                </script>
+
+
                 <hr class="my-4">
             </div>
         </div>
