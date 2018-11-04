@@ -303,9 +303,5 @@ namespace ShirlyStudio.Controllers
             var result = list.GroupBy(w => w.Name).Select(t => new { id = t.Key, counter = t.Sum(u => u.Price) }).OrderByDescending(c => c.counter).Take(5);
             return Json(result.ToList());
         }
-
-       
-    
-
     }
 }
