@@ -38,13 +38,15 @@ namespace ShirlyStudio.Areas.Identity.Pages.Account
         {
             [Required]
             [EmailAddress]
+            [Display(Name = "אימייל")]
             public string Email { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
+            [Display(Name = "סיסמה")]
             public string Password { get; set; }
 
-            [Display(Name = "Remember me?")]
+            [Display(Name = "?זכור אותי")]
             public bool RememberMe { get; set; }
         }
 

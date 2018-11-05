@@ -285,7 +285,6 @@ namespace ShirlyStudio.Controllers
                     [HttpGet]
         public JsonResult GetRecordsMonthly()
         {
-
             return Json(_context.Workshop.OrderBy(n => n.FullData).ToList());
         }
         //for graphs
@@ -298,18 +297,11 @@ namespace ShirlyStudio.Controllers
         //join function
         public JsonResult Tryjoin()
         {
-            var shirlyStudioContext = _context.CustomerRegistration.Include(w => w.Customer).Include(w => w.Workshop);
-
-            var list = from CustomerRegistration in shirlyStudioContext
-                       
-                       join Customer in shirlyStudioContext
-                       on CustomerRegistration.CustomerId equals Customer.CustomerId
-                       select new { Name = CustomerRegistration.WorkshopId, CustomerRegistration.WorkshopId };
-            var result = list.GroupBy(w => w.WorkshopId).Select(t => new { id = t.Key, counter = t.Sum(u => u.WorkshopId) }).OrderByDescending(c => c.counter).Take(5);
+            var list = from Workshop in _context.Workshop
+                       join Customer in _context.Customer on Workshop.WorkshopName equals Customer.CustomerName
+                       select new { Name = Workshop.WorkshopName, Workshop.Price };
+            var result = list.GroupBy(w => w.Name).Select(t => new { id = t.Key, counter = t.Sum(u => u.Price) }).OrderByDescending(c => c.counter).Take(5);
             return Json(result.ToList());
         }
-
-     
-
     }
 }
