@@ -228,23 +228,7 @@
 
 
 
-                    var chart = new Chart(ctx, {
-                        // The type of chart we want to create
-                        type: 'line',
-
-                        // The data for our dataset
-                        data: {
-
-                            labels: lables,
-                            datasets: [{
-                                label: "סדנאות לפי מחירים",
-                                backgroundColor: 'rgb(255, 99, 132)',
-                                borderColor: 'rgb(255, 99, 132)',
-                                data: price,
-                            }]
-                        }
-
-                    });
+           
                 }
             }
         );
@@ -351,24 +335,7 @@
                         .attr('y', function (d) { return y(d) })
                         .attr('height', function (d) { return height - y(d) })
 
-                    var chart = new Chart(ctx, {
-                        // The type of chart we want to create
-                        type: 'line',
-
-
-                        // The data for our dataset
-                        data: {
-                            labels: lables,
-                            datasets: [{
-                                label: "סדנאות לפי מקומות פנויים",
-                                backgroundColor: 'rgb(152, 99, 132)',
-                                borderColor: 'rgb(152, 99, 132)',
-                                data: ams
-                            }]
-                        }
-
-
-                    });
+           
                 }
             }
         );
@@ -382,11 +349,9 @@
     <tr>
         <td>
             {{Name}}
-            @*@Html.DisplayFor(modelItem => item.Name)*@
         </td>
         <td>
             {{Price}}
-            @*@Html.DisplayFor(modelItem => item.Price)*@
         </td>
     </tr>
 </script>
