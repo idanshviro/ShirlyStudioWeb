@@ -163,7 +163,23 @@
     <div id='calendar'></div>
 
 </section>
-<section id="video">
+<section class="bg-primary" id="facebook">
+    <div id="fb-root"></div>
+    <h2 class="section-heading text-white">עמוד הפייסבוק שלנו</h2>
+    <hr class="light my-4" id="line-white">
+    <script>
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = 'https://connect.facebook.net/he_IL/sdk.js#xfbml=1&version=v3.1';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+
+
+    <div class="fb-page" data-href="https://www.facebook.com/StudioShirly/" data-tabs="timeline" data-width="500" data-height="800" data-small-header="false" data-adapt-container-width="false" data-hide-cover="false" data-show-facepile="false"><blockquote cite="https://www.facebook.com/StudioShirly/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/StudioShirly/">‏שירלי מרכז אומנויות‏</a></blockquote></div>
+</section>
+<section  id="video">
     <center>
         <div class='youtube_codegena' id='ESG7XlAyyDU' data-params='?&theme=dark&autohide=2&modestbranding=1&rel=0&start=7' src='https://i.postimg.cc/kGwNVdGk/1.jpg' style='width:1000px; height:500px;'></div>
         <script src='https://rawgit.com/shaneapen/Async-Youtube-Player/master/async_youtube_player.js'></script><div style='font-size: 0.8em'></div>
