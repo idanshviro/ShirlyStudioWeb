@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -175,24 +178,49 @@ namespace ShirlyStudio.Controllers
             //// System.Threading.Thread.Sleep(100);
             //return Json(json);
             var sa = new JsonSerializerSettings();
-
-            var eventList = from e in _context.Workshop
+            var md5 = MD5.Create();
+            //myColor.R.ToString("X2") + myColor.G.ToString("X2") + myColor.B.ToString("X2");
+            if (User.Identity.Name != null)
+            { 
+              var eventList = from e in _context.Workshop
                             select new
-                            {
-
+                            {         
+                                url = "https://localhost:44336/CustomerRegistrations/confirmation/?WorkshopId=" + e.WorkshopId + "&customermail=" + User.Identity.Name,
                                 id = e.WorkshopId,
                                 title = e.WorkshopName,
                                 description = e.Description,
-                                start = e.FullData.ToString("s"),
-
+                                start = e.FullData.ToString(),
+                                end = e.FullData.AddHours(e.Duration).ToString(),
+                                color = '#' + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).R.ToString("X2")
+                                + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).G.ToString("X2")
+                                + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).B.ToString("X2")
                             };
+                var rows = eventList.ToArray();
+                return Json(rows, sa);
+            }  
+            else
+            {
+                var eventListWithOutIdentity = from e in _context.Workshop
+                                select new
+                                {
+                                    id = e.WorkshopId,
+                                    title = e.WorkshopName,
+                                    description = e.Description,
+                                    start = e.FullData.ToString(),
+                                    end = e.FullData.AddHours(e.Duration).ToString(),
+                                    color = '#' + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).R.ToString("X2")
+                                    + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).G.ToString("X2")
+                                    + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).B.ToString("X2")
+                                };
+                var rows = eventListWithOutIdentity.ToArray();
+                return Json(rows, sa);
+
+            }
             //foreach(var ev in eventList)
             //{
             //    if()
             //}
-            var rows = eventList.ToArray();
-
-            return Json(rows, sa);
+           
         }
 
         public async Task<IActionResult> Filter(string WorkshopName, int price, int available_members)

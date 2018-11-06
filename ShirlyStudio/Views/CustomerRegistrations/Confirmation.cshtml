@@ -1,0 +1,47 @@
+﻿@model ShirlyStudio.Models.CustomerRegistration
+
+@{
+    ViewData["Title"] = "Confirmation";
+    Layout = "~/Views/Shared/_Layout-page.cshtml";
+}
+
+<h2>הרשמה לסדנה</h2>
+
+<h3>האם ברצונך להרשם לסדנה הבאה? </h3>
+<div>
+    <hr />
+    <dl>
+        <di>
+            <dt>שם הסדנה</dt>
+            <dd>@ViewBag.WorkshopName</dd>
+        </di>
+        <di>
+            <dt>שם הלקוח</dt>
+            <dd> @ViewBag.CustomerName</dd>
+        </di>
+        <di>
+            <dt>קטגוריה</dt>
+            <dd> @ViewBag.Category</dd>
+        </di>
+        <di>
+            <dt>שם המורה</dt>
+            <dd> @ViewBag.Teacher</dd>
+        </di>
+        <di>
+            <dt>תאריך ושעה</dt>
+            <dd> @ViewBag.Time</dd>
+        </di>
+        <di>
+            <dt>מחיר</dt>
+            <dd> @ViewBag.Price</dd>
+        </di>
+    </dl>
+
+
+    <form asp-action="Confirmation">
+        <input type="hidden" value="@ViewBag.WorkshopId" name="WorkshopId" />
+        <input type="hidden" value="@ViewBag.CustomerId" name="CustomerId"  />
+        <input type="submit" value="הרשם" class="btn btn-default" /> |
+        <a asp-action="Index">חזרה לרישומים שלי</a>
+    </form>
+</div>

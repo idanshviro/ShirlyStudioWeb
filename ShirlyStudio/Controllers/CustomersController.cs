@@ -27,15 +27,15 @@ namespace ShirlyStudio.Controllers
         }
 
         // GET: Customers/Details/5
-        public async Task<IActionResult> Details(int? CustomerId)
+        public async Task<IActionResult> Details(int? Id)
         {
-            if (CustomerId == null)
+            if (Id == null)
             {
                 return NotFound();
             }
 
             var customer = await _context.Customer
-                .FirstOrDefaultAsync(m => m.CustomerId == CustomerId);
+                .FirstOrDefaultAsync(m => m.CustomerId == Id);
             if (customer == null)
             {
                 return NotFound();
@@ -67,14 +67,14 @@ namespace ShirlyStudio.Controllers
         }
 
         // GET: Customers/Edit/5
-        public async Task<IActionResult> Edit(int? CustomerId)
+        public async Task<IActionResult> Edit(int? Id)
         {
-            if (CustomerId == null)
+            if (Id == null)
             {
                 return NotFound();
             }
 
-            var customer = await _context.Customer.FindAsync(CustomerId);
+            var customer = await _context.Customer.FindAsync(Id);
             if (customer == null)
             {
                 return NotFound();
@@ -118,15 +118,15 @@ namespace ShirlyStudio.Controllers
         }
 
         // GET: Customers/Delete/5
-        public async Task<IActionResult> Delete(int? CustomerId)
+        public async Task<IActionResult> Delete(int? Id)
         {
-            if (CustomerId == null)
+            if (Id == null)
             {
                 return NotFound();
             }
 
             var customer = await _context.Customer
-                .FirstOrDefaultAsync(m => m.CustomerId == CustomerId);
+                .FirstOrDefaultAsync(m => m.CustomerId == Id);
             if (customer == null)
             {
                 return NotFound();
@@ -138,17 +138,17 @@ namespace ShirlyStudio.Controllers
         // POST: Customers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int CustomerId)
+        public async Task<IActionResult> DeleteConfirmed(int Id)
         {
-            var customer = await _context.Customer.FindAsync(CustomerId);
+            var customer = await _context.Customer.FindAsync(Id);
             _context.Customer.Remove(customer);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CustomerExists(int CustomerId)
+        private bool CustomerExists(int Id)
         {
-            return _context.Customer.Any(e => e.CustomerId == CustomerId);
+            return _context.Customer.Any(e => e.CustomerId == Id);
         }
         public async Task<IActionResult> CreateFromUser(string userJson)
         {
