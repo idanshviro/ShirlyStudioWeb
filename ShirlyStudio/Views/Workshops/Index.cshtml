@@ -134,13 +134,12 @@
                 url: "/Workshops/GetRecordsMonthly",
                 success: function (data) {
                     //    console.log(data);
-                    //   var ctx = document.getElementById('prices_chart').getContext('2d');
+                       var ctx = document.getElementById('prices_chart').getContext('2d');
                     var lables = [];
                     var price = [];
                     for (i in data) {
                         lables.push(data[i].workshopName);
                         price.push(data[i].price);
-
                     }
 
                     // Simple example dataset
@@ -225,10 +224,6 @@
                         .attr('width', barWidth - 1)
                         .attr('y', function (d) { return y(d) })
                         .attr('height', function (d) { return height - y(d) })
-
-
-
-           
                 }
             }
         );
