@@ -42,6 +42,7 @@ namespace WebApplication4.Models
         [Required]
         [Display(Name = "שם המורה")]
         public int TeacherId { get; set; }
+
         [Display(Name = "שם המורה")]
         public virtual Teacher Teacher { get; set; }
 

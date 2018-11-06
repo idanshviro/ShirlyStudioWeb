@@ -25,6 +25,6 @@ namespace ShirlyStudio.Models
 
         public DbSet<ShirlyStudio.Models.CustomerRegistration> CustomerRegistration { get; set; }
 
-        public DbSet<ShirlyStudio.Models.cluster_customizer> cluster_customizer { get; set; }
+        public DbSet<ShirlyStudio.Models.ClusterResulter> ClusterResulter { get; set; }
     }
 }
