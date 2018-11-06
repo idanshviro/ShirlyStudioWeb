@@ -338,16 +338,6 @@ namespace ShirlyStudio.Controllers
         public JsonResult Related(int? id)
         {
 
-            //for testing only!!
-            //Clear DB before retrain
-            //var rows = from o in _context.ClusterResulter
-            //           select o;
-            //foreach (var row in rows)
-            //{
-            //    _context.ClusterResulter.Remove(row);
-            //}
-            //_context.SaveChanges();
-
 
             //Getting The detaled book
             var workshop = _context.Workshop.Find(id);
@@ -419,9 +409,19 @@ namespace ShirlyStudio.Controllers
                     .Where(b => b.ClusterRes == predId);
             }
 
-            
+            var recomended = from bk in _context.Workshop
+                             join cr in crs on bk.WorkshopId equals cr.WokshopId
+                             where cr.WokshopId != id
+                             select new
+                             {
+                                 Id = bk.WorkshopId,
+                                 Name = bk.WorkshopName,
+                                 Price = bk.Price,
+                                 Category = bk.Category,
+                                 Result = cr.ClusterRes
+                             };
 
-            return Json("1");
+            return Json(recomended);
         }
     }
 }
