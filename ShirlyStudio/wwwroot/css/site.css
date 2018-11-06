@@ -4,6 +4,14 @@
     text-align: center;
 }
 
+.btn btn-link navbar-btn navbar-link {
+    margin-top: -10px;
+    font-weight: 1000;
+    color: black;
+    font-size: 22px;
+    font-family: 'Secular One', sans-serif;
+}
+
 #logo {
     width: 200px;
     height: 150px;
@@ -40,7 +48,7 @@ text-align:center;
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
-    position: absolute;
+    position: static;
     left: 25%;
 }
 #contact {

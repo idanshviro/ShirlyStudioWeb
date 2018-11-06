@@ -24,6 +24,8 @@ namespace ShirlyStudio.Controllers
             var shirlyStudioContext = _context.CustomerRegistration.Include(c => c.Customer).Include(c => c.Workshop);
             return View(await shirlyStudioContext.ToListAsync());
         }
+
+        [HttpGet]
         public async Task<IActionResult> MyIndex()
         {
             var Customer = from c in _context.CustomerRegistration.Include(c => c.Customer).Include(c => c.Workshop)
@@ -35,22 +37,30 @@ namespace ShirlyStudio.Controllers
 
 
         // GET: CustomerRegistrations/Details/5
-        public async Task<IActionResult> Details(int? CustomerRegistrationId)
+        public async Task<IActionResult> Details(int? Id)
         {
-            if (CustomerRegistrationId == null)
+            if (Id == null)
             {
                 return NotFound();
             }
 
             var customerRegistration = await _context.CustomerRegistration
                 .Include(c => c.Customer)
-                .Include(c => c.Workshop)
-                .FirstOrDefaultAsync(m => m.CustomerRegistrationId == CustomerRegistrationId);
+                .Include(c => c.Workshop).Include(c=>c.Workshop.Teacher).Include(c => c.Workshop.Category)
+                .FirstOrDefaultAsync(m => m.CustomerRegistrationId == Id);
+
             if (customerRegistration == null)
             {
                 return NotFound();
             }
-
+            ViewData["WorkshopName"] = customerRegistration.Workshop.WorkshopName;
+            ViewData["CustomerName"] = customerRegistration.Customer.CustomerName;
+            ViewData["Time"] = customerRegistration.Workshop.FullData.Day + "/" + customerRegistration.Workshop.FullData.Month + "/" + customerRegistration.Workshop.FullData.Year 
+                + "  " + customerRegistration.Workshop.FullData.TimeOfDay + "-" 
+                + customerRegistration.Workshop.FullData.AddHours(customerRegistration.Workshop.Duration).TimeOfDay;
+           ViewData["Teacher"] = customerRegistration.Workshop.Teacher.TeacherName;
+            ViewData["Price"] = customerRegistration.Workshop.Price;
+            ViewData["Category"] = customerRegistration.Workshop.Category.CategoryName;
             return View(customerRegistration);
         }
 
@@ -105,16 +115,17 @@ namespace ShirlyStudio.Controllers
                     _context.Add(customerRegistration);
                     await _context.SaveChangesAsync();
                     //return RedirectToAction(nameof(HomeController.Index));
-                    return RedirectToAction("MyIndex", "CustomerRegistration");
+                    // return RedirectToAction("MyIndex","CustomerRegistration");
+                    return RedirectToAction(nameof(MyIndex));
                 }
                 //return RedirectToAction(nameof(HomeController.Index));
-                // return RedirectToAction("Index", "Home");
-               return RedirectToAction("MyIndex", "CustomerRegistration");
+                 return RedirectToAction("Index","Home");
+             // return RedirectToAction("MyIndex", "CustomerRegistration");
             }
             else
             {
                 ViewData["error"] = "לקוח יקר, הנך רשום כבר לסדנה זו";
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction("Error","Home");
             }
         }
 
@@ -219,7 +230,7 @@ namespace ShirlyStudio.Controllers
             var customerRegistration = await _context.CustomerRegistration.FindAsync(id);
             _context.CustomerRegistration.Remove(customerRegistration);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(MyIndex));
         }
 
         private bool CustomerRegistrationExists(int id)
