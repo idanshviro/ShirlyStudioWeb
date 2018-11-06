@@ -5,27 +5,40 @@
     Layout = "~/Views/Shared/_Layout-page.cshtml";
 }
 
-<h2>Details</h2>
+<h2>פרטי הסדנה</h2>
 
 <div>
-    <h4>CustomerRegistration</h4>
+   
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Customer)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Customer.Email)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Workshop)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Workshop.WorkshopName)
-        </dd>
+        <dl>
+            <di>
+                <dt>שם הסדנה</dt>
+                <dd>@ViewBag.WorkshopName</dd>
+            </di>
+            <di>
+                <dt>שם הלקוח</dt>
+                <dd> @ViewBag.CustomerName</dd>
+            </di>
+            <di>
+                <dt>קטגוריה</dt>
+                <dd> @ViewBag.Category</dd>
+            </di>
+            <di>
+                <dt>שם המורה</dt>
+                <dd> @ViewBag.Teacher</dd>
+            </di>
+            <di>
+                <dt>תאריך ושעה</dt>
+                <dd> @ViewBag.Time</dd>
+            </di>
+            <di>
+                <dt>מחיר</dt>
+                <dd> @ViewBag.Price</dd>
+            </di>
+        </dl>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.CustomerRegistrationId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="MyIndex">חזרה לרישומי הסדנאות שלי</a>
 </div>
