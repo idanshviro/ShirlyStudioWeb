@@ -24,5 +24,7 @@ namespace ShirlyStudio.Models
         public DbSet<WebApplication4.Models.Workshop> Workshop { get; set; }
 
         public DbSet<ShirlyStudio.Models.CustomerRegistration> CustomerRegistration { get; set; }
+
+        public DbSet<ShirlyStudio.Models.ClusterResulter> ClusterResulter { get; set; }
     }
 }

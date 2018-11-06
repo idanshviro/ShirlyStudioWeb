@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using ShirlyStudio.Models;
+using ShirlyStudio.Services;
 using WebApplication4.Models;
+using static ShirlyStudio.Services.WorkshopClusterService;
 
 namespace ShirlyStudio.Controllers
 {
@@ -303,5 +305,96 @@ namespace ShirlyStudio.Controllers
             var result = list.GroupBy(w => w.Name).Select(t => new { id = t.Key, counter = t.Sum(u => u.Price) }).OrderByDescending(c => c.counter).Take(5);
             return Json(result.ToList());
         }
+
+        [HttpGet]
+        public JsonResult Related(int? id)
+        {
+
+            //for testing only!!
+            //Clear DB before retrain
+            //var rows = from o in _context.ClusterResulter
+            //           select o;
+            //foreach (var row in rows)
+            //{
+            //    _context.ClusterResulter.Remove(row);
+            //}
+            //_context.SaveChanges();
+
+
+            //Getting The detaled book
+            var workshop = _context.Workshop.Find(id);
+            //(cach) Check if allready have previos prediction
+            var clusterResult = _context.ClusterResulter
+                .Where(b => b.WokshopId == id)
+                .FirstOrDefault();
+
+            IQueryable<ClusterResulter> crs;
+
+
+            if (clusterResult != null)
+            {
+                //create list of recomandation for join Recomandation 
+
+                crs = _context.ClusterResulter.Where(b => b.ClusterRes == clusterResult.ClusterRes);
+            }
+            else
+            {
+
+                //Create Dataset file from all the books Using BookService
+                WorkshopClusterService workshopService = new WorkshopClusterService(_context);
+                workshopService.PreproccessingAllWorkshops();
+
+                //Clear DB before retrain
+                var rows = from o in _context.ClusterResulter
+                           select o;
+                foreach (var row in rows)
+                {
+                    _context.ClusterResulter.Remove(row);
+                }
+                _context.SaveChanges();
+                //_context.ClusterResulter.RemoveRange();
+                //_context.SaveChanges();
+
+                //Train Modal
+                WorkshopClustering bc = new WorkshopClustering();
+
+
+                //Get all Books
+                var workshops = _context.Workshop.ToList(); 
+                //Predict for each Workshop and create DB ClusterResulter
+                foreach (Workshop ws in workshops)
+                {
+                    //Preparing ClusterResulter for DB
+                    ClusterResulter cr = new ClusterResulter();
+
+                    //ADding BookID to ClusterResulter
+                    cr.WokshopId = ws.WorkshopId;
+
+                    // Prepare BookItem as BookData (featuresSet)
+                    WorkshopData wd = workshopService.CreateDataObject(ws);
+
+                    //Train & Predict
+                    ClusterPrediction cp = bc.Predict(wd);
+                    cr.ClusterRes = Convert.ToInt32(cp.PredictedClusterId);
+
+                    //Save Result in DB
+                    _context.ClusterResulter.Add(cr);
+                }
+                _context.SaveChanges();
+
+                //Get Book Prediction Class
+                ClusterPrediction cp_final = bc.Predict(workshopService.CreateDataObject(workshop));
+                int predId = Convert.ToInt32(cp_final.PredictedClusterId);
+
+                //Get relevant predictions
+                crs = _context.ClusterResulter
+                    .Where(b => b.ClusterRes == predId);
+            }
+
+            
+
+            return Json("1");
+        }
     }
 }
+
