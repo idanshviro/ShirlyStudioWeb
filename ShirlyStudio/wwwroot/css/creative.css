@@ -70,8 +70,9 @@ ul.navbar-nav {
 
 .section-heading {
     margin-top: 0;
-    font-family:'Secular One', sans-serif;
+    font-family: 'Secular One', sans-serif;
     font-size: 35px;
+    text-shadow: 2px 2px 6px
 }
 
 ::-moz-selection {
