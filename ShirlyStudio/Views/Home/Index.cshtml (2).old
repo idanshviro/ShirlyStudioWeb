@@ -18,6 +18,26 @@
         </div>
     </div>
 </header>
+
+<head>
+    <meta charset="UTF-8">
+    <title>3D Shader Image Transition | HTML | CSS | JavaScript | Scripton |</title>
+</head>
+<body>
+    <div id="three-container"></div>
+    <div id="instructions">
+        Press Hold Right Mouse Button and drag to control the animation!
+    </div>
+    <script src='js/three.min.js'></script>
+    <script src='js/TweenMax.min.js'></script>
+    <script src='js/bas.js'></script>
+    <script src='js/OrbitControls-2.js'></script>
+    <script src="js/index.js"></script>
+</body>
+
+
+
+</head>
 <section class="bg-primary" id="about">
     <div class="container">
         <div class="row">
