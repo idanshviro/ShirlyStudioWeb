@@ -357,7 +357,7 @@ namespace ShirlyStudio.Controllers
                             Count = g.Count()
                         };
             
-            return Json(query);
+            return Json(query.OrderByDescending(c=>c.Count).Take(5));
 
             //  var result = list.GroupBy(w => w.WorkshopName).Select(t => new { id = t.Key, counter = id.Count() }).OrderByDescending(c => c.counter).Take(5);
             //   return Json(result.ToList());
