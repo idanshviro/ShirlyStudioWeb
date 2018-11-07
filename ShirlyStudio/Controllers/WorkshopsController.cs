@@ -196,7 +196,8 @@ namespace ShirlyStudio.Controllers
             if (User.Identity.Name != null)
             { 
               var eventList = from e in _context.Workshop
-                            select new
+                              where (e.Available_Members != 0)
+                              select new
                             {         
                                 url = "https://localhost:44336/CustomerRegistrations/confirmation/?WorkshopId=" + e.WorkshopId + "&customermail=" + User.Identity.Name,
                                 id = e.WorkshopId,

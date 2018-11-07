@@ -14,10 +14,25 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Customer)
+                שם הלקוח
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Workshop)
+                שם הסדנה
+            </th>
+            <th>
+                קטגוריה
+            </th>
+            <th>
+                שם המורה
+            </th>
+            <th>
+                תאריך ושעה
+            </th>
+            <th>
+                משך הסדנה בשעות
+            </th>
+            <th>
+                מחיר
             </th>
             <th></th>
         </tr>
@@ -30,6 +45,21 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Workshop.WorkshopName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Workshop.Category.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Workshop.Teacher.TeacherName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Workshop.FullData)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Workshop.Duration)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Workshop.Price)
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.CustomerRegistrationId">פרטי רישום</a> |

@@ -12,7 +12,6 @@ namespace ShirlyStudio.Controllers
     public class CustomerRegistrationsController : Controller
     {
         private readonly ShirlyStudioContext _context;
-
         public CustomerRegistrationsController(ShirlyStudioContext context)
         {
             _context = context;
@@ -21,14 +20,14 @@ namespace ShirlyStudio.Controllers
         // GET: CustomerRegistrations
         public async Task<IActionResult> Index()
         {
-            var shirlyStudioContext = _context.CustomerRegistration.Include(c => c.Customer).Include(c => c.Workshop);
+            var shirlyStudioContext = _context.CustomerRegistration.Include(c => c.Customer).Include(c => c.Workshop).Include(c => c.Workshop.Teacher).Include(c => c.Workshop.Category);
             return View(await shirlyStudioContext.ToListAsync());
         }
 
         [HttpGet]
         public async Task<IActionResult> MyIndex()
         {
-            var Customer = from c in _context.CustomerRegistration.Include(c => c.Customer).Include(c => c.Workshop)
+            var Customer = from c in _context.CustomerRegistration.Include(c => c.Customer).Include(c => c.Workshop).Include(c => c.Workshop.Teacher).Include(c => c.Workshop.Category)
                            where (c.Customer.Email.Equals(User.Identity.Name))
                            select c;
             //var shirlyStudioContext = _context.CustomerRegistration.Include(c => c.Customer).Include(c => c.Workshop);
@@ -138,9 +137,18 @@ namespace ShirlyStudio.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                   
+
                     _context.Add(customerRegistration);
+                    var Workshop = from R in _context.Workshop.Include(w => w.Category).Include(w => w.Teacher)
+                                   where (R.WorkshopId.Equals(customerRegistration.WorkshopId))
+                                       select R;
+                        Workshop.First().Available_Members = Workshop.First().Available_Members - 1;
+                      _context.Workshop.Update(Workshop.First());
+                    //_context.Workshop. Entry(Workshop).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
-                    //_context.Custo
+
+
                     //return RedirectToAction(nameof(HomeController.Index));
                     // return RedirectToAction("MyIndex","CustomerRegistration");
                     return RedirectToAction(nameof(MyIndex));
@@ -254,9 +262,14 @@ namespace ShirlyStudio.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var customerRegistration = await _context.CustomerRegistration.FindAsync(id);
+            var Workshop = from R in _context.Workshop.Include(w => w.Category).Include(w => w.Teacher)
+                           where (R.WorkshopId.Equals(customerRegistration.WorkshopId))
+                           select R;
+            Workshop.First().Available_Members = Workshop.First().Available_Members + 1;
+            _context.Workshop.Update(Workshop.First());
             _context.CustomerRegistration.Remove(customerRegistration);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(MyIndex));
+            return RedirectToAction(nameof(Index));
         }
 
         private bool CustomerRegistrationExists(int id)
