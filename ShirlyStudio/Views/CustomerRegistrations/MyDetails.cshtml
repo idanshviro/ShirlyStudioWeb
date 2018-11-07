@@ -1,8 +1,8 @@
 ﻿@model ShirlyStudio.Models.CustomerRegistration
 
 @{
-    ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout-page.cshtml";
+    ViewData["Title"] = "MyDetails";
+    Layout = "~/Views/Shared/OnlyHomePageLayout.cshtml";
 }
 
 <h2>פרטי הסדנה</h2>
@@ -40,5 +40,5 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Index">חזרה לרישומי הסדנאות</a>
+    <a asp-action="MyIndex">חזרה לרישומי הסדנאות שלי</a>
 </div>

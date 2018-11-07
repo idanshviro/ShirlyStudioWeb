@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "MyIndex";
+    Layout = "~/Views/Shared/OnlyHomePageLayout.cshtml";
 }
 
 <h2>הרישומים שלי</h2>
@@ -22,14 +23,13 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Customer.Email)
+                @Html.DisplayFor(modelItem => item.Customer.CustomerName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Workshop.WorkshopName)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.CustomerRegistrationId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CustomerRegistrationId">Delete</a>
+                <a asp-action="MyDetails" asp-route-id="@item.CustomerRegistrationId">פרטי הרישום לסדנה</a> 
             </td>
         </tr>
 }

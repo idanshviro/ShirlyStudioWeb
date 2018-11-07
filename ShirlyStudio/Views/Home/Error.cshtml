@@ -1,12 +1,13 @@
 ﻿
 @{
     ViewData["Title"] = "Error";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/OnlyHomePageLayout.cshtml";
 }
 
-<h2>שים לב!</h2>
+<h2>!שגיאה</h2>
+
 <body>
-    @ViewBag.error
+    <p>@ViewBag.message</p>
 </body>
 
 

@@ -64,6 +64,32 @@ namespace ShirlyStudio.Controllers
             return View(customerRegistration);
         }
 
+        public async Task<IActionResult> MyDetails(int? Id)
+        {
+            if (Id == null)
+            {
+                return NotFound();
+            }
+
+            var customerRegistration = await _context.CustomerRegistration
+                .Include(c => c.Customer)
+                .Include(c => c.Workshop).Include(c => c.Workshop.Teacher).Include(c => c.Workshop.Category)
+                .FirstOrDefaultAsync(m => m.CustomerRegistrationId == Id);
+
+            if (customerRegistration == null)
+            {
+                return NotFound();
+            }
+            ViewData["WorkshopName"] = customerRegistration.Workshop.WorkshopName;
+            ViewData["CustomerName"] = customerRegistration.Customer.CustomerName;
+            ViewData["Time"] = customerRegistration.Workshop.FullData.Day + "/" + customerRegistration.Workshop.FullData.Month + "/" + customerRegistration.Workshop.FullData.Year
+                + "  " + customerRegistration.Workshop.FullData.TimeOfDay + "-"
+                + customerRegistration.Workshop.FullData.AddHours(customerRegistration.Workshop.Duration).TimeOfDay;
+            ViewData["Teacher"] = customerRegistration.Workshop.Teacher.TeacherName;
+            ViewData["Price"] = customerRegistration.Workshop.Price;
+            ViewData["Category"] = customerRegistration.Workshop.Category.CategoryName;
+            return View(customerRegistration);
+        }
         // GET: CustomerRegistrations/Create
         public IActionResult Create()
         {
@@ -114,6 +140,7 @@ namespace ShirlyStudio.Controllers
                 {
                     _context.Add(customerRegistration);
                     await _context.SaveChangesAsync();
+                    //_context.Custo
                     //return RedirectToAction(nameof(HomeController.Index));
                     // return RedirectToAction("MyIndex","CustomerRegistration");
                     return RedirectToAction(nameof(MyIndex));
@@ -124,8 +151,7 @@ namespace ShirlyStudio.Controllers
             }
             else
             {
-                ViewData["error"] = "לקוח יקר, הנך רשום כבר לסדנה זו";
-                return RedirectToAction("Error","Home");
+                return RedirectToAction("Error","Home", new { message = "!לקוח יקר, הנך כבר רשום לסדנה זו" });
             }
         }
 

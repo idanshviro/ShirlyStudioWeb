@@ -55,17 +55,29 @@ namespace ShirlyStudio.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CategoryId,CategoryName")] Category category)
         {
-            if (ModelState.IsValid)
+
+            var Category = from R in _context.Category
+                           where (R.CategoryName.Equals(category.CategoryName))
+                           select R;
+            if (!Category.Any())
             {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                if (ModelState.IsValid)
+                {
+                    _context.Add(category);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(category);
             }
-            return View(category);
+            else
+            {
+                return RedirectToAction("Error", "Home", new { message = "!מורה יקר, קגוריה זו כבר קיימת" });
+            }
         }
 
-        // GET: Categories/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+            // GET: Categories/Edit/5
+            public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {

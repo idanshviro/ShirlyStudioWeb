@@ -5,9 +5,9 @@
     Layout = "~/Views/Shared/_Layout-page.cshtml";
 }
 
-<h2>Delete</h2>
+<h2>מחיקת רישום</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3> האם ברצונך למחוק רישום לסדנה זו עבור לקוח זה?</h3>
 <div>
     <h4>CustomerRegistration</h4>
     <hr />
@@ -28,7 +28,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="CustomerRegistrationId" />
-        <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="מחק רישום" class="btn btn-default" /> |
+        <a asp-action="Index">חזרה לרשימת הרישומים</a>
     </form>
 </div>

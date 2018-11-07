@@ -56,13 +56,23 @@ namespace ShirlyStudio.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TeacherId,TeacherName")] Teacher teacher)
         {
-            if (ModelState.IsValid)
+            var Teacher = from R in _context.Teacher
+                               where (R.TeacherName.Equals(teacher.TeacherName))
+                               select R;
+            if (!Teacher.Any())
             {
-                _context.Add(teacher);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(teacher);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(teacher);
             }
-            return View(teacher);
+            else
+            {
+                return RedirectToAction("Error", "Home", new { message = "מורה זה כבר רשום למערכת!" });
+            }
         }
 
         // GET: Teachers/Edit/5

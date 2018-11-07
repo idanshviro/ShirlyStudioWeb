@@ -67,15 +67,26 @@ namespace ShirlyStudio.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("WorkshopId,WorkshopName,CategoryId,FullData,Price,Available_Members,Description,TeacherId,Duration")] Workshop workshop)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(workshop);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryName", workshop.CategoryId);
-            ViewData["TeacherId"] = new SelectList(_context.Teacher, "TeacherId", "TeacherName", workshop.TeacherId);
-            return View(workshop);
+        //  var WorkShopContext = _context.Workshop.Include(w => w.Teacher);
+         //  var Workshop = from W in WorkShopContext
+            //            where ((W.FullData.Equals(workshop.FullData))&(W.Teacher.TeacherName.Equals(workshop.Teacher.TeacherName))&(W.Duration.Equals(workshop.Duration)))
+           //               select W;
+         //   if (!Workshop.Any())
+         //  {
+                if (ModelState.IsValid)
+                {
+                    _context.Add(workshop);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryName", workshop.CategoryId);
+                ViewData["TeacherId"] = new SelectList(_context.Teacher, "TeacherId", "TeacherName", workshop.TeacherId);
+                return View(workshop);
+      //      }
+       //    else
+       //    {
+       //         return RedirectToAction("Error", "Home", new { message = "מורה יקר, סדנה זו כבר קיימת!" });
+        //    }
         }
 
         // GET: Workshops/Edit/5
