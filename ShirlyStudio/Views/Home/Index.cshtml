@@ -17,12 +17,26 @@
 <script>jq223 = jQuery.noConflict(false)</script>
 <script src="~/js/jquery-3.3.1.js"></script>
 
+@*<header class="masthead text-center text-white d-flex">
+        <div class="container my-auto">
+            <div class="row">
+            </div>
+        </div>
+    </header>*@
+<head>
+    <meta charset="UTF-8">
+    <title>3D Shader Image Transition | HTML | CSS | JavaScript | Scripton |</title>
+</head>
+<link href="~/css/index.css" rel="stylesheet" />
+
 <header class="masthead text-center text-white d-flex">
     <div class="container my-auto">
         <div class="row">
         </div>
     </div>
 </header>
+
+
 <section class="bg-primary" id="about">
     <div class="container">
         <div class="row">
@@ -51,52 +65,56 @@
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h2 class="section-heading">רשימת סדנאות</h2>
-
-                @* This is a web service weather *@
-                <div id="showWeatherForcast"></div>
-                <script type="text/javascript">
-
-
-                    $(document).ready(function () {
+                <p>
+                    @* This is a web service weather *@
+                    <div id="showWeatherForcast"></div>
+                    <script type="text/javascript">
 
 
-                        var city = 'rishon lezion';
-                        var key = 'f5a9dcc0f6833e86ac420e23ee102d20';
-                        $.ajax({
-                            url: 'https://api.openweathermap.org/data/2.5/weather',
-                            dataType: 'json',
-                            type: 'GET',
-                            data: { q: city, appid: key, units: 'metric' },
-
-                            success: function (data) {
-                                var wf = '';
-                                $.each(data.weather, function (index, val) {
-                                    wf += '<p><b>' + data.name + "</b><img src= https://openweathermap.org/img/w/" + val.icon + ".png></p>" +
-                                        data.main.temp + '&deg;C ' + ' | ' + val.main + ',' + val.description
-                                    if (val.description == "moderate rain" || val.description == "shower rain" || val.description == "rain" || val.description == "thunderstorm" || val.description == "snow" || val.description == "mist" || val.description == "thunderstorm with rain") {
-                                        wf += '  - Due to an extreame weather no class for today :( ';
-
-                                    }
-                                    else { wf += '  - A wondarful weather for art ! :)' }
-                                });
-                                $("#showWeatherForcast").html(wf);
-                            }
+                        $(document).ready(function () {
 
 
-                        })
+                            var city = 'rishon lezion';
+                            var key = 'f5a9dcc0f6833e86ac420e23ee102d20';
+                            $.ajax({
+                                url: 'https://api.openweathermap.org/data/2.5/weather',
+                                dataType: 'json',
+                                type: 'GET',
+                                data: { q: city, appid: key, units: 'metric' },
+
+                                success: function (data) {
+                                    var wf = '';
+                                    $.each(data.weather, function (index, val) {
+                                        wf += '<p><b>' + data.name + "</b><img src= https://openweathermap.org/img/w/" + val.icon + ".png></p>" +
+                                            data.main.temp + '&deg;C ' + ' | ' + val.main + ',' + val.description
+                                        if (val.description == "moderate rain" || val.description == "shower rain" || val.description == "rain" || val.description == "thunderstorm" || val.description == "snow" || val.description == "mist" || val.description == "thunderstorm with rain") {
+                                            wf += '  - Due to an extreame weather no class for today :( ';
+
+                                        }
+                                        else { wf += '  - A wondarful weather for art ! :)' }
+                                    });
+                                    $("#showWeatherForcast").html(wf);
+                                }
 
 
-                    }
-                    )
+                            })
+
+
+                        }
+                        )
 
 
 
-                </script>
-
+                    </script>
+                </p>
                 <hr class="my-4">
             </div>
         </div>
     </div>
+    <aside>
+
+        של החיייםםם
+    </aside>
     <script>
         function formatDate(date) {
             var d = new Date(date),
@@ -160,8 +178,9 @@
             margin: 0 auto;
         }
     </style>
-    <div id='calendar'></div>
-
+    <p>
+        <div id='calendar'></div>
+    </p>
 </section>
 <section class="bg-primary" id="facebook">
     <div id="fb-root"></div>
@@ -179,7 +198,8 @@
 
     <div class="fb-page" data-href="https://www.facebook.com/StudioShirly/" data-tabs="timeline" data-width="500" data-height="800" data-small-header="false" data-adapt-container-width="false" data-hide-cover="false" data-show-facepile="false"><blockquote cite="https://www.facebook.com/StudioShirly/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/StudioShirly/">‏שירלי מרכז אומנויות‏</a></blockquote></div>
 </section>
-<section  id="video">
+
+<section id="video">
     <center>
         <div class='youtube_codegena' id='ESG7XlAyyDU' data-params='?&theme=dark&autohide=2&modestbranding=1&rel=0&start=7' src='https://i.postimg.cc/kGwNVdGk/1.jpg' style='width:1000px; height:500px;'></div>
         <script src='https://rawgit.com/shaneapen/Async-Youtube-Player/master/async_youtube_player.js'></script><div style='font-size: 0.8em'></div>

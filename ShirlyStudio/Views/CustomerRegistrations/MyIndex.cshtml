@@ -2,8 +2,15 @@
 
 @{
     ViewData["Title"] = "MyIndex";
-     Layout = "~/Views/Shared/OnlyHomePageLayout.cshtml";
+    Layout = "~/Views/Shared/OnlyHomePageLayout.cshtml";
 }
+
+<script src='../js/three.min.js'></script>
+<script src='../js/TweenMax.min.js'></script>
+<script src='../js/bas.js'></script>
+<script src='../js/OrbitControls-2.js'></script>
+<script src="../js/index.js"></script>
+<link href="~/css/index.css" rel="stylesheet" />
 
 <h2>הרישומים שלי</h2>
 
@@ -26,7 +33,7 @@
                 תאריך ושעה
             </th>
             <th>
-               משך הסדנה בשעות
+                משך הסדנה בשעות
             </th>
             <th>
                 מחיר
@@ -34,33 +41,35 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.CustomerName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Workshop.WorkshopName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Workshop.Category.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Workshop.Teacher.TeacherName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Workshop.FullData)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Workshop.Duration)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Workshop.Price)
-            </td>
-            <td>
-                <a asp-action="MyDetails" asp-route-id="@item.CustomerRegistrationId">פרטי הרישום לסדנה</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.CustomerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Workshop.WorkshopName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Workshop.Category.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Workshop.Teacher.TeacherName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Workshop.FullData)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Workshop.Duration)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Workshop.Price)
+                </td>
+                <td>
+                    <a asp-action="MyDetails" asp-route-id="@item.CustomerRegistrationId">פרטי הרישום לסדנה</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+<div id="three-container"></div>
