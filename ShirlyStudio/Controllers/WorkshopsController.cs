@@ -337,16 +337,30 @@ namespace ShirlyStudio.Controllers
         }
 
         //join function
-        public JsonResult Tryjoin()
-        {
-            var shirlyStudioContext = _context.Workshop.Include(w => w.Category).Include(w => w.Teacher);
+        [HttpGet]
 
-            var list = from Workshop in _context.Workshop
-                                  join CustomerRegistration in _context.CustomerRegistration on Workshop.WorkshopId equals CustomerRegistration.WorkshopId
-                                  select new { WorkshopName = Workshop.WorkshopName};
-            return Json(list);
-                      //  var result = list.GroupBy(w => w.WorkshopName).Select(t => new { id = t.Key, counter = id.Count() }).OrderByDescending(c => c.counter).Take(5);
-                     //   return Json(result.ToList());
+        public JsonResult Groupby()
+        {
+            /*
+                        var list = from Workshop in _context.Workshop
+                                              join CustomerRegistration in _context.CustomerRegistration on Workshop.WorkshopId equals CustomerRegistration.WorkshopId
+                                              select new { WorkshopName = Workshop.WorkshopName};
+                        var result = list.GroupBy(w => w.WorkshopName).Select(t => new { id = t.Key, counter = t.Key.Count() }).OrderByDescending(c => c.counter).Take(5);
+                        return Json(result);
+                        */
+
+            var query = from r in _context.CustomerRegistration
+                        group r.CustomerRegistrationId by r.Workshop.WorkshopName into g
+                        select new
+                        {
+                            workshopName = g.Key,
+                            Count = g.Count()
+                        };
+            
+            return Json(query.OrderByDescending(c=>c.Count).Take(5));
+
+            //  var result = list.GroupBy(w => w.WorkshopName).Select(t => new { id = t.Key, counter = id.Count() }).OrderByDescending(c => c.counter).Take(5);
+            //   return Json(result.ToList());
         }
 
         [HttpGet]

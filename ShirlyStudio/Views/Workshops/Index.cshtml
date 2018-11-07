@@ -338,16 +338,16 @@
 
     </script>
 </div>
-<h1> Join & GroupBy</h1>
+<h1> הסדנאות המובילות בקרב המשתמשים</h1>
 @*= join and groupby*@
 <script id="row" type="template">
     <tr>
         <td>
             {{workshopName}}
         </td>
-        @* <td>
-                    {{Price}}
-                </td>*@
+         <td>
+                    {{count}}
+                </td>
             </tr>
         </script>
 
@@ -359,7 +359,7 @@
                         type: "Get",
                         dataType: "json",
 
-                        url: "/Workshops/Tryjoin",
+                        url: "/Workshops/Groupby",
                         success: function (data) {
                             $('#join tr').remove();
                             var temp = $.trim($('#row'));
@@ -368,7 +368,7 @@
                             $.each(data, function (index, element) {
                                 console.log(element);
                                 $('#join').append(
-                                    `<tr><td>${element.id}</td><td>${element.counter}</td></tr>`
+                                    `<tr><td>${element.workshopName}</td><td>${element.count}</td></tr>`
                                 )
                             });
                         }
@@ -385,9 +385,9 @@
                     <th>
                         @Html.DisplayNameFor(model => model.WorkshopName)
                     </th>
-                    @*  <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>*@
+                     <th>
+           מספר רישומים
+        </th>
                     <th></th>
                 </tr>
             </thead>
