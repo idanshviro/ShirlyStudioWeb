@@ -323,7 +323,7 @@ namespace ShirlyStudio.Controllers
             }
         }
 
-                    [HttpGet]
+        [HttpGet]
         public JsonResult GetRecordsMonthly()
         {
             return Json(_context.Workshop.OrderBy(n => n.FullData).ToList());
@@ -338,26 +338,19 @@ namespace ShirlyStudio.Controllers
         //join function
         public JsonResult Tryjoin()
         {
+            var shirlyStudioContext = _context.Workshop.Include(w => w.Category).Include(w => w.Teacher);
+
             var list = from Workshop in _context.Workshop
-                       join Customer in _context.Customer on Workshop.WorkshopName equals Customer.CustomerName
-                       select new { Name = Workshop.WorkshopName, Workshop.Price };
-            var result = list.GroupBy(w => w.Name).Select(t => new { id = t.Key, counter = t.Sum(u => u.Price) }).OrderByDescending(c => c.counter).Take(5);
-            return Json(result.ToList());
+                                  join CustomerRegistration in _context.CustomerRegistration on Workshop.WorkshopId equals CustomerRegistration.WorkshopId
+                                  select new { WorkshopName = Workshop.WorkshopName};
+            return Json(list);
+                      //  var result = list.GroupBy(w => w.WorkshopName).Select(t => new { id = t.Key, counter = id.Count() }).OrderByDescending(c => c.counter).Take(5);
+                     //   return Json(result.ToList());
         }
 
         [HttpGet]
         public JsonResult Related(int? id)
         {
-
-            //for testing only!!
-            //Clear DB before retrain
-            //var rows = from o in _context.ClusterResulter
-            //           select o;
-            //foreach (var row in rows)
-            //{
-            //    _context.ClusterResulter.Remove(row);
-            //}
-            //_context.SaveChanges();
 
 
             //Getting The detaled book
@@ -430,9 +423,19 @@ namespace ShirlyStudio.Controllers
                     .Where(b => b.ClusterRes == predId);
             }
 
-            
+            var recomended = from bk in _context.Workshop
+                             join cr in crs on bk.WorkshopId equals cr.WokshopId
+                             where cr.WokshopId != id
+                             select new
+                             {
+                                 Id = bk.WorkshopId,
+                                 Name = bk.WorkshopName,
+                                 Price = bk.Price,
+                                 Category = bk.Category,
+                                 Result = cr.ClusterRes
+                             };
 
-            return Json("1");
+            return Json(recomended);
         }
     }
 }

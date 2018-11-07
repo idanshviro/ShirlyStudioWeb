@@ -343,62 +343,62 @@
 <script id="row" type="template">
     <tr>
         <td>
-            {{Name}}
+            {{workshopName}}
         </td>
-        <td>
-            {{Price}}
-        </td>
-    </tr>
-</script>
+        @* <td>
+                    {{Price}}
+                </td>*@
+            </tr>
+        </script>
 
-@* for view the join and group by*@
-<script>
-    $(function () {
-        $.ajax(
-            {
-                type: "Get",
-                dataType: "json",
+        @* for view the join and group by*@
+        <script>
+            $(function () {
+                $.ajax(
+                    {
+                        type: "Get",
+                        dataType: "json",
 
-                url: "/Workshops/Tryjoin",
-                success: function (data) {
-                    $('#join tr').remove();
-                    var temp = $.trim($('#row'));
-                    console.log(data);
-                    console.log(temp);
-                    $.each(data, function (index, element) {
-                        console.log(element);
-                        $('#join').append(
-                            `<tr><td>${element.id}</td><td>${element.counter}</td></tr>`
-                        )
-                    });
-                }
+                        url: "/Workshops/Tryjoin",
+                        success: function (data) {
+                            $('#join tr').remove();
+                            var temp = $.trim($('#row'));
+                            console.log(data);
+                            console.log(temp);
+                            $.each(data, function (index, element) {
+                                console.log(element);
+                                $('#join').append(
+                                    `<tr><td>${element.id}</td><td>${element.counter}</td></tr>`
+                                )
+                            });
+                        }
+                    }
+                );
             }
-        );
-    }
 
-    )
+            )
 
-</script>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.WorkshopName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody id="join"></tbody>
-</table>
+        </script>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.WorkshopName)
+                    </th>
+                    @*  <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>*@
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="join"></tbody>
+        </table>
 
 
 
-@section Scripts{
-    <script id="row" type="template">
-        <tr>
+        @section Scripts{
+            <script id="row" type="template">
+<tr>
             <td>
                 {{workshopName}}
                 @*@Html.DisplayFor(modelItem => item.WorkshopName)*@
