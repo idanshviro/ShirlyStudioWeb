@@ -10,7 +10,7 @@
 <p>
     <a asp-action="Create">הוספת מורה חדש</a>
 </p>
-<table class="table">
+<table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
             <th>
@@ -20,17 +20,18 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TeacherName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TeacherId">עריכה</a> |
-                <a asp-action="Details" asp-route-id="@item.TeacherId">פרטים</a> |
-                <a asp-action="Delete" asp-route-id="@item.TeacherId">מחיקה</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TeacherName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.TeacherId">עריכה</a> |
+                    <a asp-action="Details" asp-route-id="@item.TeacherId">פרטים</a> |
+                    <a asp-action="Delete" asp-route-id="@item.TeacherId">מחיקה</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

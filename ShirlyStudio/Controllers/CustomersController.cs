@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using WebApplication4.Models;
 
 namespace ShirlyStudio.Controllers
 {
+    [Authorize(Roles = "Admin,Customer")]
     public class CustomersController : Controller
     {
         private readonly ShirlyStudioContext _context;
@@ -21,12 +23,14 @@ namespace ShirlyStudio.Controllers
         }
 
         // GET: Customers
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Customer.ToListAsync());
         }
 
         // GET: Customers/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? Id)
         {
             if (Id == null)
@@ -45,6 +49,7 @@ namespace ShirlyStudio.Controllers
         }
 
         // GET: Customers/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -55,6 +60,7 @@ namespace ShirlyStudio.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("CustomerId,CustomerName,Age,Email,PhoneNumber")] Customer customer)
         {
             if (ModelState.IsValid)
@@ -67,6 +73,7 @@ namespace ShirlyStudio.Controllers
         }
 
         // GET: Customers/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? Id)
         {
             if (Id == null)
@@ -87,6 +94,7 @@ namespace ShirlyStudio.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("CustomerId,CustomerName,Age,Email,PhoneNumber")] Customer customer)
         {
             if ( id != customer.CustomerId)
@@ -118,6 +126,7 @@ namespace ShirlyStudio.Controllers
         }
 
         // GET: Customers/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? Id)
         {
             if (Id == null)
@@ -138,6 +147,7 @@ namespace ShirlyStudio.Controllers
         // POST: Customers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int Id)
         {
             var customer = await _context.Customer.FindAsync(Id);
