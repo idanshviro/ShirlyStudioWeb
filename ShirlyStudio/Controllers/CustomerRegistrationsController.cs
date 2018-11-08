@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using ShirlyStudio.Models;
 
 namespace ShirlyStudio.Controllers
 {
+    [Authorize(Roles = "Admin,Customer")]
     public class CustomerRegistrationsController : Controller
     {
         private readonly ShirlyStudioContext _context;
@@ -25,6 +27,7 @@ namespace ShirlyStudio.Controllers
         }
 
         [HttpGet]
+     
         public async Task<IActionResult> MyIndex()
         {
             var Customer = from c in _context.CustomerRegistration.Include(c => c.Customer).Include(c => c.Workshop).Include(c => c.Workshop.Teacher).Include(c => c.Workshop.Category)
@@ -259,6 +262,7 @@ namespace ShirlyStudio.Controllers
         // POST: CustomerRegistrations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var customerRegistration = await _context.CustomerRegistration.FindAsync(id);

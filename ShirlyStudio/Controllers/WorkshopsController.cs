@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ using static ShirlyStudio.Services.WorkshopClusterService;
 
 namespace ShirlyStudio.Controllers
 {
+    [Authorize(Roles = "Admin,Customer")]
     public class WorkshopsController : Controller
     {
         private readonly ShirlyStudioContext _context;
@@ -26,6 +28,7 @@ namespace ShirlyStudio.Controllers
         }
 
         // GET: Workshops
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var shirlyStudioContext = _context.Workshop.Include(w => w.Category).Include(w => w.Teacher);
@@ -33,6 +36,7 @@ namespace ShirlyStudio.Controllers
         }
 
         // GET: Workshops/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -53,6 +57,7 @@ namespace ShirlyStudio.Controllers
         }
 
         // GET: Workshops/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryName");
@@ -65,6 +70,7 @@ namespace ShirlyStudio.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("WorkshopId,WorkshopName,CategoryId,FullData,Price,Available_Members,Description,TeacherId,Duration")] Workshop workshop)
         {
         //  var WorkShopContext = _context.Workshop.Include(w => w.Teacher);
@@ -90,6 +96,7 @@ namespace ShirlyStudio.Controllers
         }
 
         // GET: Workshops/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -112,6 +119,7 @@ namespace ShirlyStudio.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("WorkshopId,WorkshopName,CategoryId,FullData,Price,Available_Members,Description,TeacherId,Duration")] Workshop workshop)
         {
             if (id != workshop.WorkshopId)
@@ -145,6 +153,7 @@ namespace ShirlyStudio.Controllers
         }
 
         // GET: Workshops/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -179,6 +188,8 @@ namespace ShirlyStudio.Controllers
         {
             return _context.Workshop.Any(e => e.WorkshopId == id);
         }
+
+   
         public ActionResult FindAll()
         {
             //var json = _context.Workshop.AsEnumerable().Select(e => new
@@ -192,15 +203,16 @@ namespace ShirlyStudio.Controllers
             //return Json(json);
             var sa = new JsonSerializerSettings();
             var md5 = MD5.Create();
+            //url = "https://localhost:44336/CustomerRegistrations/confirmation/?WorkshopId=" + e.WorkshopId + "&customermail=" + User.Identity.Name,
             //myColor.R.ToString("X2") + myColor.G.ToString("X2") + myColor.B.ToString("X2");
             if (User.Identity.Name != null)
             { 
               var eventList = from e in _context.Workshop
                               where (e.Available_Members != 0)
                               select new
-                            {         
-                                url = "https://localhost:44336/CustomerRegistrations/confirmation/?WorkshopId=" + e.WorkshopId + "&customermail=" + User.Identity.Name,
-                                id = e.WorkshopId,
+                            {
+                                  url = "/CustomerRegistrations/confirmation/?WorkshopId=" + e.WorkshopId + "&customermail=" + User.Identity.Name,
+                                  id = e.WorkshopId,
                                 title = e.WorkshopName,
                                 description = e.Description,
                                 start = e.FullData.ToString(),
@@ -350,6 +362,7 @@ namespace ShirlyStudio.Controllers
         }
 
         [HttpGet]
+   
         public JsonResult Related(int? id)
         {
 

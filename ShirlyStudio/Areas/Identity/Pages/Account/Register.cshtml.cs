@@ -23,17 +23,20 @@ namespace ShirlyStudio.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         [BindProperty]
@@ -41,6 +44,7 @@ namespace ShirlyStudio.Areas.Identity.Pages.Account
 
         public string ReturnUrl { get; set; }
 
+        public RoleManager<IdentityRole> RoleManager { get; }
         public class InputModel
         {
             [Required]
@@ -93,10 +97,43 @@ namespace ShirlyStudio.Areas.Identity.Pages.Account
             
 				string userJson = JsonConvert.SerializeObject(cas);
 				returnUrl = returnUrl ?? Url.Content("~/Customers/CreateFromUser/?userjson=" + System.Net.WebUtility.UrlEncode(userJson));//user
-				    var result = await _userManager.CreateAsync(user, Input.Password);
+				var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    string[] roles = { "Admin", "Customer" };
+
+                    foreach (var role in roles)
+                    {
+
+                        if (!await _roleManager.RoleExistsAsync(role))
+                        {
+                            var users = new IdentityRole(role);
+                            await _roleManager.CreateAsync(users);
+
+                        }
+                    }
+
+                    var poweruser = new IdentityUser
+                    {
+                        UserName = "admin@gmail.com",
+                        Email = "admin@gmail.com",
+                    };
+                    string userPWD = "Q1w2e3!";
+                    var _user = await _userManager.FindByEmailAsync("admin@gmail.com");
+
+                    if (_user == null)
+                    {
+                        var createPowerUser = await _userManager.CreateAsync(poweruser, userPWD);
+                        if (createPowerUser.Succeeded)
+                        {
+                            //here we tie the new user to the role
+                            await _userManager.AddToRoleAsync(poweruser, "Admin");
+
+                        }
+                    }
+                    await _userManager.AddToRoleAsync(user, "Customer");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Page(
@@ -107,7 +144,7 @@ namespace ShirlyStudio.Areas.Identity.Pages.Account
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
+      
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
                 }
