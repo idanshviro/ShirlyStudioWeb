@@ -75,3 +75,7 @@ rect {
     width: 300px;
 }
 
+.editBookButton:before {
+    background-image: url(https://image.flaticon.com/icons/png/512/38/38609.png);
+    background-size: 16px 16px;
+}
