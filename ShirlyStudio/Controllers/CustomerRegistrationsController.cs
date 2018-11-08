@@ -17,6 +17,96 @@ namespace ShirlyStudio.Controllers
             _context = context;
         }
 
+        /*
+        public async Task<IActionResult> Filterregistration(string teacher, string wname,string cname)
+        {
+
+            var shirlyStudioContext = _context.Workshop.Include(w => w.Category).Include(w => w.Teacher).Include(w=>w.CustomerRegistrations) ;
+            // אותה שאילתה לשלושתם רק נדרש להגדיר את המשתנים
+            if (teacher == null && wname == null && cname == null) return Json(await shirlyStudioContext.ToListAsync());
+            //  if (Name == null) Name = "";
+            if (cname == null && wname == null && teacher != null)
+            {
+
+                var m = await (from c in shirlyStudioContext
+                                   //לתקן את התנאים - בגללם כל התוצאות יוצאות
+                               where (c.Teacher.TeacherName.Contains(teacher))
+                               orderby c.FullData
+                               select c).ToListAsync();
+                return Json(m);
+            }
+            else if (cname == null && wname != null && teacher == null)
+            {
+                var q = await (from c in shirlyStudioContext
+                                   //לתקן את התנאים - בגללם כל התוצאות יוצאות
+                               where (c.WorkshopName.Contains(wname))
+                               orderby c.FullData
+                               select c).ToListAsync();
+                return Json(q);
+
+            }
+            else if (cname ==null && wname != null && teacher != null)
+            {
+                var q = await (from c in shirlyStudioContext
+                                   //לתקן את התנאים - בגללם כל התוצאות יוצאות
+                               where (c.WorkshopName.Contains(wname))
+                               where (c.Teacher.TeacherName.Contains(teacher))
+
+                               orderby c.FullData
+                               select c).ToListAsync();
+                return Json(q);
+
+            }
+            else if (cname != null && wname == null && teacher != null)
+            {
+                var q = await (from c in _context.Customer
+                               join d in _context.CustomerRegistration on c.CustomerId equals d.CustomerId
+                               //לתקן את התנאים - בגללם כל התוצאות יוצאות
+                               where (c.CustomerName.Contains(cname) 
+                                 d.Teacher.TeacherName.Contains(teacher)
+
+                               orderby c
+                               select c).ToListAsync();
+                return Json(q);
+            }
+            else if (available_members != 0 && wname != null && teacher == null)
+            {
+                var q = await (from c in shirlyStudioContext
+                                   //לתקן את התנאים - בגללם כל התוצאות יוצאות
+                               where (c.Available_Members >= available_members)
+                               where (c.WorkshopName.Contains(wname))
+
+                               orderby c.FullData
+                               select c).ToListAsync();
+                return Json(q);
+
+            }
+
+            else if (available_members != 0 && wname == null && teacher == null)
+            {
+                var q = await (from c in shirlyStudioContext
+                                   //לתקן את התנאים - בגללם כל התוצאות יוצאות
+                               where (c.Available_Members >= available_members)
+
+                               orderby c.FullData
+                               select c).ToListAsync();
+                return Json(q);
+            }
+            else
+            {
+                var q = await (from c in shirlyStudioContext
+                                   //לתקן את התנאים - בגללם כל התוצאות יוצאות
+                               where (c.Available_Members >= available_members)
+                               where (c.WorkshopName.Contains(wname))
+                               where (c.Teacher.Contains(teacher))
+                               orderby c.FullData
+                               select c).ToListAsync();
+                return Json(q);
+
+            }
+        }
+        */
+
         // GET: CustomerRegistrations
         public async Task<IActionResult> Index()
         {
@@ -279,4 +369,6 @@ namespace ShirlyStudio.Controllers
 
     
         }
-    }
+
+
+}
