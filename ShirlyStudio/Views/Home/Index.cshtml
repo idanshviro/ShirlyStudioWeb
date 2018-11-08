@@ -17,12 +17,15 @@
 <script>jq223 = jQuery.noConflict(false)</script>
 <script src="~/js/jquery-3.3.1.js"></script>
 
-@*<header class="masthead text-center text-white d-flex">
-        <div class="container my-auto">
-            <div class="row">
-            </div>
-        </div>
-    </header>*@
+<!------ Includes for the rotating pictures ---------->
+<script src='../js/three.min.js'></script>
+<script src='../js/TweenMax.min.js'></script>
+<script src='../js/bas.js'></script>
+<script src='../js/OrbitControls-2.js'></script>
+<script src="../js/index.js"></script>
+<link href="~/css/index.css" rel="stylesheet" />
+
+
 <head>
     <meta charset="UTF-8">
     <title>3D Shader Image Transition | HTML | CSS | JavaScript | Scripton |</title>
@@ -111,10 +114,7 @@
             </div>
         </div>
     </div>
-    <aside>
-
-        של החיייםםם
-    </aside>
+ 
     <script>
         function formatDate(date) {
             var d = new Date(date),
@@ -198,6 +198,9 @@
 
     <div class="fb-page" data-href="https://www.facebook.com/StudioShirly/" data-tabs="timeline" data-width="500" data-height="800" data-small-header="false" data-adapt-container-width="false" data-hide-cover="false" data-show-facepile="false"><blockquote cite="https://www.facebook.com/StudioShirly/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/StudioShirly/">‏שירלי מרכז אומנויות‏</a></blockquote></div>
 </section>
+
+<!------ Call to the rotating pictures ---------->
+<div id="three-container"></div>
 
 <section id="video">
     <center>

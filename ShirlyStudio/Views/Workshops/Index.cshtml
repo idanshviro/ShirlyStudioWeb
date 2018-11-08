@@ -11,6 +11,7 @@
 
 <script src="~/js/jquery-3.3.1.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<link href="~/css/index.css" rel="stylesheet" />
 <h2>רשימת הסדנאות</h2>
 <div>
 
@@ -25,7 +26,7 @@
 <p>
     <a asp-action="Create">יצירת סדנה חדשה</a>
 </p>
-<table class="table">
+<table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
             <th>
@@ -85,7 +86,7 @@
                     @Html.DisplayFor(modelItem => item.Duration)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.WorkshopId">עריכה</a> |
+                    <a asp-action="Edit" class="editBookButton" asp-route-id="@item.WorkshopId">עריכה</a> |
                     <a asp-action="Details" asp-route-id="@item.WorkshopId">פרטים</a> |
                     <a asp-action="Delete" asp-route-id="@item.WorkshopId">מחיקה</a>
                 </td>
@@ -134,7 +135,8 @@
                 url: "/Workshops/GetRecordsMonthly",
                 success: function (data) {
                     //    console.log(data);
-                       var ctx = document.getElementById('prices_chart').getContext('2d');
+                    var ctx = document.getElementById('prices_chart').getContext('2d');
+
                     var lables = [];
                     var price = [];
                     for (i in data) {
@@ -338,16 +340,16 @@
 
     </script>
 </div>
-<h1> Join & GroupBy</h1>
+<h1> הסדנאות המובילות בקרב המשתמשים</h1>
 @*= join and groupby*@
 <script id="row" type="template">
     <tr>
         <td>
             {{workshopName}}
         </td>
-        @* <td>
-                    {{Price}}
-                </td>*@
+         <td>
+                    {{count}}
+                </td>
             </tr>
         </script>
 
@@ -359,7 +361,7 @@
                         type: "Get",
                         dataType: "json",
 
-                        url: "/Workshops/Tryjoin",
+                        url: "/Workshops/Groupby",
                         success: function (data) {
                             $('#join tr').remove();
                             var temp = $.trim($('#row'));
@@ -368,7 +370,7 @@
                             $.each(data, function (index, element) {
                                 console.log(element);
                                 $('#join').append(
-                                    `<tr><td>${element.id}</td><td>${element.counter}</td></tr>`
+                                    `<tr><td>${element.workshopName}</td><td>${element.count}</td></tr>`
                                 )
                             });
                         }
@@ -379,15 +381,15 @@
             )
 
         </script>
-        <table class="table">
+        <table class="table table-striped table-bordered table-hover">
             <thead>
                 <tr>
                     <th>
                         @Html.DisplayNameFor(model => model.WorkshopName)
                     </th>
-                    @*  <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>*@
+                    <th>
+                        מספר רישומים
+                    </th>
                     <th></th>
                 </tr>
             </thead>
@@ -397,6 +399,7 @@
 
 
         @section Scripts{
+
             <script id="row" type="template">
 <tr>
             <td>

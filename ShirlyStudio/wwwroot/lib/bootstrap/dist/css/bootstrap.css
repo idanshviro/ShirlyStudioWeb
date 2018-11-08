@@ -1268,8 +1268,12 @@ h1,
 }
 h2,
 .h2 {
-  font-size: 30px;
-  text-align: center;
+    font-size: 35px;
+    font-family: 'Secular One', sans-serif;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    color: #black;
 }
 h3,
 .h3 {

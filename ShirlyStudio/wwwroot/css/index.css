@@ -4,7 +4,6 @@ body {
     padding: 0;
     font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
     font-size: 14px;
-    
 }
 
 #calendar {
@@ -68,7 +67,6 @@ rect {
 }
 
 #three-container {
-    width: 100px;
     transition: width 2s;
 }
 
@@ -77,3 +75,7 @@ rect {
     width: 300px;
 }
 
+.editBookButton:before {
+    background-image: url(https://image.flaticon.com/icons/png/512/38/38609.png);
+    background-size: 16px 16px;
+}

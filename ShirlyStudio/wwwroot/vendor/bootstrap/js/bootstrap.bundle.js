@@ -1190,7 +1190,8 @@
         var dimension = this._getDimension();
 
         $$$1(this._element).removeClass(ClassName.COLLAPSE).addClass(ClassName.COLLAPSING);
-        this._element.style[dimension] = 0;
+          this._
+          [dimension] = 0;
 
         if (this._triggerArray.length) {
           $$$1(this._triggerArray).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
@@ -5546,7 +5547,14 @@
         var tabClass = $tip.attr('class').match(BSCLS_PREFIX_REGEX);
 
         if (tabClass !== null && tabClass.length) {
-          $tip.removeClass(tabClass.join(''));
+            $tip.removeClass(tabClass.
+              
+                
+                
+                
+                
+                
+                (''));
         }
       };
 

@@ -52,8 +52,7 @@ text-align:center;
     left: 25%;
 }
 #contact {
-  
-       background-color:rebeccapurple;
+    background-color: #c6c3c3;
 }
 #yao{
     color:red;
@@ -86,8 +85,10 @@ text-align:center;
     }
 }
 
-
-
-
-
-
+#login {
+    margin-top: -10px;
+    font-weight: 1000;
+    color: black;
+    font-size: 22px;
+    font-family: 'Secular One', sans-serif;
+}

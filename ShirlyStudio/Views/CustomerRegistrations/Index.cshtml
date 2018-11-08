@@ -5,12 +5,27 @@
     Layout = "~/Views/Shared/_Layout-page.cshtml";
 }
 
+<script src="~/js/jquery-3.3.1.js"></script>
+
+
 <h2>רישומי לקוחות</h2>
+
+
+<div>
+
+    <input id="wname" type="text" name=" = " name" />
+    <input type="submit" value="לפי סדנה" id="filter-button" />
+    <input id="cname" type="text" name=" = " name" />
+    <input type="submit" value="לפי לקוח" id="filter-button" />
+
+    <input id="teacher" type="text" name=" = " name" />
+    <input type="submit" value="לפי מורה" id="filter-button" />
+</div>
 
 <p>
     <a asp-action="Create">רישום חדש</a>
 </p>
-<table class="table">
+<table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
             <th>
@@ -37,35 +52,118 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.CustomerName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Workshop.WorkshopName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Workshop.Category.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Workshop.Teacher.TeacherName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Workshop.FullData)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Workshop.Duration)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Workshop.Price)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.CustomerRegistrationId">פרטי רישום</a> |
-                <a asp-action="Delete" asp-route-id="@item.CustomerRegistrationId">מחיקה</a>
-            </td>
-        </tr>
-}
+    <tbody id="mixtable">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.CustomerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Workshop.WorkshopName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Workshop.Category.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Workshop.Teacher.TeacherName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Workshop.FullData)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Workshop.Duration)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Workshop.Price)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.CustomerRegistrationId">פרטי רישום</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CustomerRegistrationId">מחיקה</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+
+
+
+<script id="row" type="template">
+    <tr>
+        <td>
+            {{customer.customerName}}
+            @*@Html.DisplayFor(modelItem => item.WorkshopName)*@
+        </td>
+        <td>
+            {{workshop.workshopName}}
+            @*@Html.DisplayFor(modelItem => item.Category.CategoryName)*@
+        </td>
+        <td>
+            {{workshop.category.categoryName}}
+            @*@Html.DisplayFor(modelItem => item.FullData)*@
+        </td>
+        <td>
+            {{workshop.teacher.teacherName}}
+            @*@Html.DisplayFor(modelItem => item.Price)*@
+        </td>
+        <td>
+            {{workshop.fullData}}
+            @*@Html.DisplayFor(modelItem => item.Available_Members)*@
+        </td>
+        <td>
+            {{workshop.duration}}
+            @*@Html.DisplayFor(modelItem => item.Description)*@
+        </td>
+        <td>
+            {{teacher.teacherName}}
+            @*@Html.DisplayFor(modelItem => item.Teacher.TeacherName)*@
+        </td>
+        <td>
+            {{workshop.price}}
+            @*@Html.DisplayFor(modelItem => item.Duration)*@
+        </td>
+    </tr>
+</script>
+
+
+<script>
+    $(function () {
+
+        // לשנות את המשתנה שנכנס לפי id , price...
+        $('#teacher,#wname,#cname').keyup(function () {
+            $.ajax(
+                {
+                    type: "Get",
+                    dataType: "json",
+
+                    url: "/CustomerRegistrations/Filterregistration/?teacher=" + $(teacher).val() + '&wname=' + $(wname).val() + '&cname=' + $(cname).val(),
+                    success: function (data) {
+                        $('#mixtable tr').remove();
+                        var temp = $.trim($('#row'));
+                        console.log(data);
+                        console.log(temp);
+                        var trHTML = '';
+                        $.each(data, function (key, element) {
+                            console.log(element);
+                            trHTML += '<tr><td>' +
+                                element.customerName + '</td><td>' +
+                                element.workshopName + '</td><td>' +
+                                element.categoryName + '</td><td>' +
+                                element.teacherName + '</td><td>' +
+                                element.fullData + '</td><td>' +
+                                element.duration + '</td><td>' +
+                                element.teacherName + '</td><td>' +
+                                element.price + '</td></tr>';
+
+                        });
+                        $('#mixtable').append(trHTML);
+
+                    }
+                }
+            );
+        }
+        )
+    }
+    )
+</script>
