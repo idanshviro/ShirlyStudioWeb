@@ -7671,7 +7671,8 @@ function makeDayGridSubclass(SuperClass) {
 /* 192 */,
 /* 193 */,
 /* 194 */,
-/* 195 */,
+/* 
+ * */,
 /* 196 */,
 /* 197 */,
 /* 198 */,
@@ -12631,7 +12632,8 @@ var Toolbar = /** @class */ (function () {
                                 buttonAriaAttr = ' aria-label="' + buttonName + '"';
                             }
                             buttonEl = $(// type="button" so that it doesn't submit a form
-                            '<button type="button" class="' + buttonClasses.join(' ') + '"' +
+                                '<button type="button" class="' + buttonClasses.
+                                    (' ') + '"' +
                                 buttonAriaAttr +
                                 '>' + buttonInnerHtml + '</button>')
                                 .click(function (ev) {
