@@ -78,9 +78,16 @@ namespace ShirlyStudio.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
-                    
+
+                    //  if (Role.IsInRole("Customer"))
+                    //{
+                    //  return LocalRedirect(returnUrl);
+                    //}
+                    //else
+                    //{
                     return LocalRedirect(returnUrl);
+                    //return RedirectToAction("Index", "Workshops");
+                    //}
                 }
                 if (result.RequiresTwoFactor)
                 {

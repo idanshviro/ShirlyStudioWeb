@@ -205,7 +205,7 @@ namespace ShirlyStudio.Controllers
             var md5 = MD5.Create();
             //url = "https://localhost:44336/CustomerRegistrations/confirmation/?WorkshopId=" + e.WorkshopId + "&customermail=" + User.Identity.Name,
             //myColor.R.ToString("X2") + myColor.G.ToString("X2") + myColor.B.ToString("X2");
-            if (User.Identity.Name != null)
+            if ((User.Identity.Name != null)&(User.IsInRole("Customer")))
             { 
               var eventList = from e in _context.Workshop
                               where (e.Available_Members != 0)
