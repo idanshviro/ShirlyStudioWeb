@@ -116,10 +116,6 @@
             @*@Html.DisplayFor(modelItem => item.Description)*@
         </td>
         <td>
-            {{teacher.teacherName}}
-            @*@Html.DisplayFor(modelItem => item.Teacher.TeacherName)*@
-        </td>
-        <td>
             {{workshop.price}}
             @*@Html.DisplayFor(modelItem => item.Duration)*@
         </td>
@@ -147,14 +143,13 @@
                         $.each(data, function (key, element) {
                             console.log(element);
                             trHTML += '<tr><td>' +
-                                element.customerName + '</td><td>' +
-                                element.workshopName + '</td><td>' +
-                                element.categoryName + '</td><td>' +
-                                element.teacherName + '</td><td>' +
-                                element.fullData + '</td><td>' +
-                                element.duration + '</td><td>' +
-                                element.teacherName + '</td><td>' +
-                                element.price + '</td></tr>';
+                                element.customer.customerName + '</td><td>' +
+                                element.workshop.workshopName + '</td><td>' +
+                                element.workshop.category.categoryName + '</td><td>' +
+                                element.workshop.teacher.teacherName + '</td><td>' +
+                                element.workshop.fullData + '</td><td>' +
+                                element.workshop.duration + '</td><td>' +
+                                element.workshop.price + '</td></tr>';
 
                         });
                         $('#mixtable').append(trHTML);
