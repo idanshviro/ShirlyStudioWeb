@@ -20,8 +20,8 @@ namespace ShirlyStudio.Controllers
         [HttpGet]
         public async Task<IActionResult> Filterregistration(string teacher, string wname,string cname)
         {
-
-            var shirlyStudioContext = _context.Workshop.Include(w => w.Category).Include(w => w.Teacher).Include(w=>w.CustomerRegistrations) ;
+            var shirlyStudioContext =_context.CustomerRegistration.Include(w => w.Customer).Include(w => w.Workshop).Include(w => w.Workshop.Category).Include(w => w.Workshop.Teacher);
+            
             // אותה שאילתה לשלושתם רק נדרש להגדיר את המשתנים
             if (teacher == null && wname == null && cname == null) return Json(await shirlyStudioContext.ToListAsync());
             //  if (Name == null) Name = "";
@@ -30,8 +30,8 @@ namespace ShirlyStudio.Controllers
 
                 var m = await (from c in shirlyStudioContext
                                    //לתקן את התנאים - בגללם כל התוצאות יוצאות
-                               where (c.Teacher.TeacherName.Contains(teacher))
-                               orderby c.FullData
+                               where (c.Workshop.Teacher.TeacherName.Contains(teacher))
+                               orderby c.Workshop.FullData
                                select c).ToListAsync();
                 return Json(m);
             }
@@ -39,8 +39,8 @@ namespace ShirlyStudio.Controllers
             {
                 var q = await (from c in shirlyStudioContext
                                    //לתקן את התנאים - בגללם כל התוצאות יוצאות
-                               where (c.WorkshopName.Contains(wname))
-                               orderby c.FullData
+                               where (c.Workshop.WorkshopName.Contains(wname))
+                               orderby c.Workshop.FullData
                                select c).ToListAsync();
                 return Json(q);
 
@@ -49,72 +49,60 @@ namespace ShirlyStudio.Controllers
             {
                 var q = await (from c in shirlyStudioContext
                                    //לתקן את התנאים - בגללם כל התוצאות יוצאות
-                               where (c.WorkshopName.Contains(wname))
-                               where (c.Teacher.TeacherName.Contains(teacher))
+                               where (c.Workshop.WorkshopName.Contains(wname))
+                               where (c.Workshop.Teacher.TeacherName.Contains(teacher))
 
-                               orderby c.FullData
+                               orderby c.Workshop.FullData
                                select c).ToListAsync();
                 return Json(q);
 
             }
             else if (cname != null && wname == null && teacher != null)
             {
-                var q = await (from w in _context.Workshop
-                               join cr in _context.CustomerRegistration
-
-                               on w.WorkshopName equals cr.Workshop.WorkshopName
-
+                //mabe to change the join if not work
+                var q = await (from w in shirlyStudioContext
                                //לתקן את התנאים - בגללם כל התוצאות יוצאות
-                               where (cr.Customer.CustomerName.Contains(cname)) 
-                               where (w.Teacher.TeacherName.Contains(teacher))
+                               where (w.Customer.CustomerName.Contains(cname)) 
+                               where (w.Workshop.Teacher.TeacherName.Contains(teacher))
 
-                               orderby w.FullData
-                               select cr).ToListAsync();
+                               orderby w.Workshop.FullData
+                               select w).ToListAsync();
                 return Json(q);
             }
             else if (cname != null && wname != null && teacher == null)
             {
-                var q = await (from w in _context.Workshop
-                               join cr in _context.CustomerRegistration
-
-                               on w.WorkshopName equals cr.Workshop.WorkshopName
-
+                var q = await (from w in shirlyStudioContext
                                //לתקן את התנאים - בגללם כל התוצאות יוצאות
-                               where (cr.Customer.CustomerName.Contains(cname))
-                               where (w.WorkshopName.Contains(wname))
+                               where (w.Customer.CustomerName.Contains(cname))
+                               where (w.Workshop.WorkshopName.Contains(wname))
 
-                               orderby w.FullData
-                               select cr).ToListAsync();
+                               orderby w.Workshop.FullData
+                               select w).ToListAsync();
                 return Json(q);
 
             }
 
             else if (cname != null && wname == null && teacher == null)
             {
-                var q = await (from c in _context.Customer
+                var q = await (from c in shirlyStudioContext
                                    //לתקן את התנאים - בגללם כל התוצאות יוצאות
-                               where (c.CustomerName.Contains(cname))
+                               where (c.Customer.CustomerName.Contains(cname))
 
-                               orderby c.CustomerName
+                               orderby c.Customer.CustomerName
                                select c).ToListAsync();
                 return Json(q);
             }
             else
             {
-                // var q = await (from c in shirlyStudioContext
-                //לתקן את התנאים - בגללם כל התוצאות יוצאות
-                var q = await (from w in _context.Workshop
-                               join cr in _context.CustomerRegistration
+                
+                var q = await (from w in shirlyStudioContext
+                               
+                               where (w.Customer.CustomerName.Contains(cname))
+                               where (w.Workshop.WorkshopName.Contains(wname))
+                               where (w.Workshop.Teacher.TeacherName.Contains(teacher))
 
-                               on w.WorkshopName equals cr.Workshop.WorkshopName
-
-                               //לתקן את התנאים - בגללם כל התוצאות יוצאות
-                               where (cr.Customer.CustomerName.Contains(cname))
-                               where (w.WorkshopName.Contains(wname))
-                               where (w.Teacher.TeacherName.Contains(teacher))
-
-                               orderby w.FullData
-                               select cr).ToListAsync(); 
+                               orderby w.Workshop.FullData
+                               select w).ToListAsync(); 
                 return Json(q);
 
             }
