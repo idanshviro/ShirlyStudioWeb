@@ -11,6 +11,7 @@
 
 <script src="~/js/jquery-3.3.1.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<link href="~/css/index.css" rel="stylesheet" />
 <h2>רשימת הסדנאות</h2>
 <div>
 
@@ -85,9 +86,9 @@
                     @Html.DisplayFor(modelItem => item.Duration)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.WorkshopId">עריכה</a> |
+                    <a asp-action="Edit"  asp-route-id="@item.WorkshopId">עריכה</a> |
                     <a asp-action="Details" asp-route-id="@item.WorkshopId">פרטים</a> |
-                    <a asp-action="Delete" asp-route-id="@item.WorkshopId">מחיקה</a>
+                    <a asp-action="Delete"  asp-route-id="@item.WorkshopId">מחיקה</a>
                 </td>
             </tr>
         }
