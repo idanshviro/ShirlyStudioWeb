@@ -26,7 +26,7 @@
 <p>
     <a asp-action="Create">יצירת סדנה חדשה</a>
 </p>
-<table class="table">
+<table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
             <th>
@@ -88,7 +88,7 @@
                 <td>
                     <a asp-action="Edit" class="editBookButton" asp-route-id="@item.WorkshopId">עריכה</a> |
                     <a asp-action="Details" asp-route-id="@item.WorkshopId">פרטים</a> |
-                    <a asp-action="Delete"  asp-route-id="@item.WorkshopId">מחיקה</a>
+                    <a asp-action="Delete" asp-route-id="@item.WorkshopId">מחיקה</a>
                 </td>
             </tr>
         }
@@ -381,15 +381,15 @@
             )
 
         </script>
-        <table class="table">
+        <table class="table table-striped table-bordered table-hover">
             <thead>
                 <tr>
                     <th>
                         @Html.DisplayNameFor(model => model.WorkshopName)
                     </th>
-                     <th>
-           מספר רישומים
-        </th>
+                    <th>
+                        מספר רישומים
+                    </th>
                     <th></th>
                 </tr>
             </thead>
