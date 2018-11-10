@@ -7,6 +7,8 @@
 
 <script src="https://d3js.org/d3.v3.min.js"></script>‏
 <script src="~/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="~/css/site.css"></script>
+<link href="~/css/site.css" rel="stylesheet" />
 <link href="~/css/index.css" rel="stylesheet" />
 
 <script src="~/js/jquery-3.3.1.js"></script>
@@ -332,7 +334,7 @@
                         .attr('y', function (d) { return y(d) })
                         .attr('height', function (d) { return height - y(d) })
 
-           
+
                 }
             }
         );
@@ -347,61 +349,61 @@
         <td>
             {{workshopName}}
         </td>
-         <td>
-                    {{count}}
-                </td>
-            </tr>
-        </script>
+        <td>
+            {{count}}
+        </td>
+    </tr>
+</script>
 
-        @* for view the join and group by*@
-        <script>
-            $(function () {
-                $.ajax(
-                    {
-                        type: "Get",
-                        dataType: "json",
+@* for view the join and group by*@
+<script>
+    $(function () {
+        $.ajax(
+            {
+                type: "Get",
+                dataType: "json",
 
-                        url: "/Workshops/Groupby",
-                        success: function (data) {
-                            $('#join tr').remove();
-                            var temp = $.trim($('#row'));
-                            console.log(data);
-                            console.log(temp);
-                            $.each(data, function (index, element) {
-                                console.log(element);
-                                $('#join').append(
-                                    `<tr><td>${element.workshopName}</td><td>${element.count}</td></tr>`
-                                )
-                            });
-                        }
-                    }
-                );
+                url: "/Workshops/Groupby",
+                success: function (data) {
+                    $('#join tr').remove();
+                    var temp = $.trim($('#row'));
+                    console.log(data);
+                    console.log(temp);
+                    $.each(data, function (index, element) {
+                        console.log(element);
+                        $('#join').append(
+                            `<tr><td>${element.workshopName}</td><td>${element.count}</td></tr>`
+                        )
+                    });
+                }
             }
+        );
+    }
 
-            )
+    )
 
-        </script>
-        <table class="table table-striped table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.WorkshopName)
-                    </th>
-                    <th>
-                        מספר רישומים
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody id="join"></tbody>
-        </table>
+</script>
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkshopName)
+            </th>
+            <th>
+                מספר רישומים
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="join"></tbody>
+</table>
 
 
 
-        @section Scripts{
+@section Scripts{
 
-            <script id="row" type="template">
-<tr>
+    <script id="row" type="template">
+        <tr>
             <td>
                 {{workshopName}}
                 @*@Html.DisplayFor(modelItem => item.WorkshopName)*@

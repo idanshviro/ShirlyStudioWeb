@@ -92,3 +92,11 @@ text-align:center;
     font-size: 22px;
     font-family: 'Secular One', sans-serif;
 }
+
+#first-login{
+    width: 100%;
+}
+
+.delete-customer{
+    width:100%;
+}
