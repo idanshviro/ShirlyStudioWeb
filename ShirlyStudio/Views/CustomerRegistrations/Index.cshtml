@@ -78,7 +78,7 @@
                     @Html.DisplayFor(modelItem => item.Workshop.Price)
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.CustomerRegistrationId">פרטי רישום</a> |
+                    <a asp-action="Details" class="editBookButton" asp-route-id="@item.CustomerRegistrationId">פרטי רישום</a> |
                     <a asp-action="Delete" asp-route-id="@item.CustomerRegistrationId">מחיקה</a>
                 </td>
             </tr>

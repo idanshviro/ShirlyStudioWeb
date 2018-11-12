@@ -3,6 +3,17 @@
     padding-bottom: 20px;
     text-align: center;
 }
+body {
+    margin: 40px 10px;
+    padding: 0;
+    font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+    font-size: 14px;
+}
+
+#calendar {
+    max-width: 900px;
+    margin: 0 auto;
+}
 
 .btn btn-link navbar-btn navbar-link {
     margin-top: -10px;
@@ -91,4 +102,12 @@ text-align:center;
     color: black;
     font-size: 22px;
     font-family: 'Secular One', sans-serif;
+}
+
+#first-login{
+    width: 100%;
+}
+
+.delete-customer{
+    width:100%;
 }

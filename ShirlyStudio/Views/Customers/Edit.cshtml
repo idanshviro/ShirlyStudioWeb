@@ -5,12 +5,11 @@
     Layout = "~/Views/Shared/_Layout-page.cshtml";
 }
 
-<h2>Edit</h2>
 
-<h4>עריכת פרטי לקוח</h4>
+<h2>עריכת פרטי לקוח</h2>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-offset-3 col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CustomerId" />

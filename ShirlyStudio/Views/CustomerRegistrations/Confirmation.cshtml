@@ -46,21 +46,22 @@
     </form>
 </div>
 
+<h2> סדנאות נוספות שעשויות לעניין אותך</h2>
 </br></br>
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
             <th>
-                Workshop Name
+                שם סדנה
             </th>
             <th>
-                Workshop Price
+                מחיר
             </th>
             <th>
-                Workshop Category
+                קטגוריה
             </th>
             <th>
-                Workshop Link
+                רישום לסדנאות
             </th>
         </tr>
     </thead>
@@ -72,7 +73,7 @@
     <script>
         function getRelatedWorkshops() {
             var urlParams = getJsonFromUrl();
-            //console.log('../../../Workshops/Related/' + urlParams.WorkshopId)
+           
             $.ajax({
                 url: '../../Workshops/Related/' + urlParams.WorkshopId,
                 type: 'GET',
@@ -89,7 +90,7 @@
         }
         function goto(id) {
             var urlParams = getJsonFromUrl();
-            //console.log(location.origin + location.pathname + "?WorkshopId=" + id + "&customermail=" + urlParams.customermail);
+    
             var url = location.origin + location.pathname + "?WorkshopId=" + id + "&customermail=" + urlParams.customermail;
             window.location.replace(url);
         }

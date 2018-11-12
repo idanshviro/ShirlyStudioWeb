@@ -53,7 +53,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Duration)
             </th>
-            <th></th>
+           <th>
+               פעולות
+           </th>
         </tr>
     </thead>
 
@@ -132,7 +134,7 @@
             {
                 type: "Get",
                 dataType: "json",
-                url: "/Workshops/GetRecordsMonthly",
+                url: "/Workshops/GetWorkshops",
                 success: function (data) {
                     //    console.log(data);
                     var ctx = document.getElementById('prices_chart').getContext('2d');
@@ -239,7 +241,7 @@
             {
                 type: "Get",
                 dataType: "json",
-                url: "/Workshops/Getfreeplace",
+                url: "/Workshops/GetWorkshops",
                 success: function (data) {
                     //     console.log(data);
                     // var ctx = document.getElementById('myChart2').getContext('2d');
@@ -390,7 +392,7 @@
                     <th>
                         מספר רישומים
                     </th>
-                    <th></th>
+    
                 </tr>
             </thead>
             <tbody id="join"></tbody>

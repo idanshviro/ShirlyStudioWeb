@@ -1809,6 +1809,7 @@ pre code {
 }
 
 .form-control {
+  direction:rtl;
   display: block;
   width: 100%;
   height: calc(2.25rem + 2px);

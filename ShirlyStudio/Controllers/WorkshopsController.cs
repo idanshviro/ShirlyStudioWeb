@@ -73,12 +73,7 @@ namespace ShirlyStudio.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("WorkshopId,WorkshopName,CategoryId,FullData,Price,Available_Members,Description,TeacherId,Duration")] Workshop workshop)
         {
-        //  var WorkShopContext = _context.Workshop.Include(w => w.Teacher);
-         //  var Workshop = from W in WorkShopContext
-            //            where ((W.FullData.Equals(workshop.FullData))&(W.Teacher.TeacherName.Equals(workshop.Teacher.TeacherName))&(W.Duration.Equals(workshop.Duration)))
-           //               select W;
-         //   if (!Workshop.Any())
-         //  {
+      
                 if (ModelState.IsValid)
                 {
                     _context.Add(workshop);
@@ -88,14 +83,9 @@ namespace ShirlyStudio.Controllers
                 ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryName", workshop.CategoryId);
                 ViewData["TeacherId"] = new SelectList(_context.Teacher, "TeacherId", "TeacherName", workshop.TeacherId);
                 return View(workshop);
-      //      }
-       //    else
-       //    {
-       //         return RedirectToAction("Error", "Home", new { message = "מורה יקר, סדנה זו כבר קיימת!" });
-        //    }
+   
         }
 
-        // GET: Workshops/Edit/5
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -189,78 +179,106 @@ namespace ShirlyStudio.Controllers
             return _context.Workshop.Any(e => e.WorkshopId == id);
         }
 
-   
+        [AllowAnonymous]
         public ActionResult FindAll()
         {
-            //var json = _context.Workshop.AsEnumerable().Select(e => new
-            //{
-            //    id = e.Id,
-            //    title = e.Name,
-            //    
-            //    start = e.FullData
-            //}).ToList();
-            //// System.Threading.Thread.Sleep(100);
-            //return Json(json);
+
             var sa = new JsonSerializerSettings();
             var md5 = MD5.Create();
-            //url = "https://localhost:44336/CustomerRegistrations/confirmation/?WorkshopId=" + e.WorkshopId + "&customermail=" + User.Identity.Name,
-            //myColor.R.ToString("X2") + myColor.G.ToString("X2") + myColor.B.ToString("X2");
-            if ((User.Identity.Name != null)&(User.IsInRole("Customer")))
-            { 
-              var eventList = from e in _context.Workshop
-                              where (e.Available_Members != 0)
-                              select new
-                            {
-                                  url = "/CustomerRegistrations/confirmation/?WorkshopId=" + e.WorkshopId + "&customermail=" + User.Identity.Name,
-                                  id = e.WorkshopId,
-                                title = e.WorkshopName,
-                                description = e.Description,
-                                start = e.FullData.ToString(),
-                                end = e.FullData.AddHours(e.Duration).ToString(),
-                                color = '#' + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).R.ToString("X2")
-                                + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).G.ToString("X2")
-                                + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).B.ToString("X2")
-                            };
-                var rows = eventList.ToArray();
-                return Json(rows, sa);
-            }  
-            else
+
+            if ((User.IsInRole("Customer")))
             {
-                var eventListWithOutIdentity = from e in _context.Workshop
+                var eventList = from e in _context.Workshop
+                                where ((e.Available_Members != 0)&(e.FullData >= DateTime.Today))
                                 select new
                                 {
+                                    url = "/CustomerRegistrations/confirmation/?WorkshopId=" + e.WorkshopId + "&customermail=" + User.Identity.Name,
                                     id = e.WorkshopId,
                                     title = e.WorkshopName,
                                     description = e.Description,
                                     start = e.FullData.ToString(),
                                     end = e.FullData.AddHours(e.Duration).ToString(),
+                                    //Genrate unique color based on category name
+                                    color = '#' + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).R.ToString("X2")
+                                + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).G.ToString("X2")
+                                + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).B.ToString("X2")
+                                };
+
+                var Before = from e in _context.Workshop
+                             where (e.FullData < DateTime.Today)
+                             select new
+                             {
+                                 url = "/Home/Error/?message=משתמש יקר, סדנה זו כבר התקיימה",
+                                 id = e.WorkshopId,
+                                 title = e.WorkshopName,
+                                 description = e.Description,
+                                 start = e.FullData.ToString(),
+                                 end = e.FullData.AddHours(e.Duration).ToString(),
+                                 //Genrate unique color based on category name
+                                 color = '#' + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).R.ToString("X2")
+                                 + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).G.ToString("X2")
+                                 + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).B.ToString("X2")
+                             };
+
+             
+                var total = eventList.Concat(Before);
+                return Json(total.ToArray(), sa);
+            }
+            else if ((User.Identity.Name == null))
+            {
+
+                var eventList = from e in _context.Workshop
+                                select new
+                                {
+                                    url = "/Home/Error/?message=על מנת לקבל פרטים נוספים אודות הסדנה יש להרשם למערכת, תודה",
+                                    id = e.WorkshopId,
+                                    title = e.WorkshopName,
+                                    description = e.Description,
+                                    start = e.FullData.ToString(),
+                                    end = e.FullData.AddHours(e.Duration).ToString(),
+                                    //Genrate unique color based on category name
                                     color = '#' + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).R.ToString("X2")
                                     + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).G.ToString("X2")
                                     + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).B.ToString("X2")
                                 };
-                var rows = eventListWithOutIdentity.ToArray();
+                
+                var rows = eventList.ToArray();
                 return Json(rows, sa);
 
             }
-            //foreach(var ev in eventList)
-            //{
-            //    if()
-            //}
-           
+            else
+            {
+                var eventListWithOutIdentity = from e in _context.Workshop
+                                               select new
+                                               {
+                                                   id = e.WorkshopId,
+                                                   title = e.WorkshopName,
+                                                   description = e.Description,
+                                                   start = e.FullData.ToString(),
+                                                   end = e.FullData.AddHours(e.Duration).ToString(),
+                                                   color = '#' + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).R.ToString("X2")
+                                                   + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).G.ToString("X2")
+                                                   + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).B.ToString("X2")
+                                               };
+                var rows = eventListWithOutIdentity.ToArray();
+                return Json(rows, sa);
+            }
         }
 
-        public async Task<IActionResult> Filter(string WorkshopName, int price, int available_members)
+
+ 
+            public async Task<IActionResult> Filter(string WorkshopName, int price, int available_members)
         {
 
             var shirlyStudioContext = _context.Workshop.Include(w => w.Category).Include(w => w.Teacher);
-            // אותה שאילתה לשלושתם רק נדרש להגדיר את המשתנים
+   
             if (WorkshopName == null && price == 0 && available_members == 0) return Json(await shirlyStudioContext.ToListAsync());
             //  if (Name == null) Name = "";
             if (available_members == 0 && price == 0 && WorkshopName != null)
             {
 
                 var m = await (from c in shirlyStudioContext
-                                   //לתקן את התנאים - בגללם כל התוצאות יוצאות
+                    
                                where (c.WorkshopName.Contains(WorkshopName))
                                orderby c.FullData
                                select c).ToListAsync();
@@ -269,7 +287,7 @@ namespace ShirlyStudio.Controllers
             else if (available_members == 0 && price != 0 && WorkshopName == null)
             {
                 var q = await (from c in shirlyStudioContext
-                                   //לתקן את התנאים - בגללם כל התוצאות יוצאות
+                           
                                where (c.Price <= price)
                                orderby c.FullData
                                select c).ToListAsync();
@@ -279,7 +297,7 @@ namespace ShirlyStudio.Controllers
             else if (available_members == 0 && price != 0 && WorkshopName != null)
             {
                 var q = await (from c in shirlyStudioContext
-                                   //לתקן את התנאים - בגללם כל התוצאות יוצאות
+                  
                                where (c.Price <= price)
                                where (c.WorkshopName.Contains(WorkshopName))
 
@@ -291,7 +309,7 @@ namespace ShirlyStudio.Controllers
             else if (available_members != 0 && price == 0 && WorkshopName != null)
             {
                 var q = await (from c in shirlyStudioContext
-                                   //לתקן את התנאים - בגללם כל התוצאות יוצאות
+                  
                                where (c.Available_Members >= available_members)
                                where (c.WorkshopName.Contains(WorkshopName))
 
@@ -302,7 +320,7 @@ namespace ShirlyStudio.Controllers
             else if (available_members != 0 && price != 0 && WorkshopName == null)
             {
                 var q = await (from c in shirlyStudioContext
-                                   //לתקן את התנאים - בגללם כל התוצאות יוצאות
+                      
                                where (c.Available_Members >= available_members)
                                where (c.Price <= price)
 
@@ -315,7 +333,7 @@ namespace ShirlyStudio.Controllers
             else if (available_members != 0 && price == 0 && WorkshopName == null)
             {
                 var q = await (from c in shirlyStudioContext
-                                   //לתקן את התנאים - בגללם כל התוצאות יוצאות
+                       
                                where (c.Available_Members >= available_members)
 
                                orderby c.FullData
@@ -325,7 +343,7 @@ namespace ShirlyStudio.Controllers
             else
             {
                 var q = await (from c in shirlyStudioContext
-                                   //לתקן את התנאים - בגללם כל התוצאות יוצאות
+                          
                                where (c.Available_Members >= available_members)
                                where (c.Price <= price)
                                where (c.WorkshopName.Contains(WorkshopName))
@@ -335,31 +353,21 @@ namespace ShirlyStudio.Controllers
 
             }
         }
-
-        [HttpGet]
-        public JsonResult GetRecordsMonthly()
-        {
-            return Json(_context.Workshop.OrderBy(n => n.FullData).ToList());
-        }
         //for graphs
         [HttpGet]
-        public JsonResult Getfreeplace()
+        public JsonResult GetWorkshops()
         {
             return Json(_context.Workshop.OrderBy(n => n.FullData).ToList());
         }
+      
+     
 
         //join function
         [HttpGet]
 
         public JsonResult Groupby()
         {
-            /*
-                        var list = from Workshop in _context.Workshop
-                                              join CustomerRegistration in _context.CustomerRegistration on Workshop.WorkshopId equals CustomerRegistration.WorkshopId
-                                              select new { WorkshopName = Workshop.WorkshopName};
-                        var result = list.GroupBy(w => w.WorkshopName).Select(t => new { id = t.Key, counter = t.Key.Count() }).OrderByDescending(c => c.counter).Take(5);
-                        return Json(result);
-                        */
+        
 
             var query = from r in _context.CustomerRegistration
                         group r.CustomerRegistrationId by r.Workshop.WorkshopName into g
@@ -371,17 +379,14 @@ namespace ShirlyStudio.Controllers
             
             return Json(query.OrderByDescending(c=>c.Count).Take(5));
 
-            //  var result = list.GroupBy(w => w.WorkshopName).Select(t => new { id = t.Key, counter = id.Count() }).OrderByDescending(c => c.counter).Take(5);
-            //   return Json(result.ToList());
         }
 
+        // AI - KMEANS clustering algo by k=3
         [HttpGet]
-   
         public JsonResult Related(int? id)
         {
 
-
-            //Getting The detaled book
+            //Getting The related worksops
             var workshop = _context.Workshop.Find(id);
             //(cach) Check if allready have previos prediction
             var clusterResult = _context.ClusterResulter
@@ -400,7 +405,7 @@ namespace ShirlyStudio.Controllers
             else
             {
 
-                //Create Dataset file from all the books Using BookService
+                //Create Dataset file from all the Workshops Using WorkshopService
                 WorkshopClusterService workshopService = new WorkshopClusterService(_context);
                 workshopService.PreproccessingAllWorkshops();
 
@@ -419,7 +424,7 @@ namespace ShirlyStudio.Controllers
                 WorkshopClustering bc = new WorkshopClustering();
 
 
-                //Get all Books
+                //Get all Workshops
                 var workshops = _context.Workshop.ToList(); 
                 //Predict for each Workshop and create DB ClusterResulter
                 foreach (Workshop ws in workshops)
@@ -427,10 +432,10 @@ namespace ShirlyStudio.Controllers
                     //Preparing ClusterResulter for DB
                     ClusterResulter cr = new ClusterResulter();
 
-                    //ADding BookID to ClusterResulter
+                    //ADding WorkshopID to ClusterResulter
                     cr.WokshopId = ws.WorkshopId;
 
-                    // Prepare BookItem as BookData (featuresSet)
+                    // Prepare WorkshopItem as WorkshopData (featuresSet)
                     WorkshopData wd = workshopService.CreateDataObject(ws);
 
                     //Train & Predict
