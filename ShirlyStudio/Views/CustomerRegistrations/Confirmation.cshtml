@@ -42,7 +42,9 @@
         <input type="hidden" value="@ViewBag.WorkshopId" name="WorkshopId" />
         <input type="hidden" value="@ViewBag.CustomerId" name="CustomerId" />
         <input type="submit" value="הרשם" class="btn btn-info" /> |
-        <a asp-action="MyIndex">חזרה לרישומים שלי</a>
+        <form asp-action="MyIndex">
+            <button class="btn btn-info">חזרה לרישומים שלי</button>
+        </form>
     </form>
 </div>
 
