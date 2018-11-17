@@ -49,6 +49,8 @@ namespace WebApplication4.Models
         [Display(Name = "משך הסדנה")]
         public double Duration { get; set; }
 
+
+        // Many to many
         [Display(Name = "רישומים")]
         public virtual ICollection<CustomerRegistration> CustomerRegistrations { get; set; } }
 

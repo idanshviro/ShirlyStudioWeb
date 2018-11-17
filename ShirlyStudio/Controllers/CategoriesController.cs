@@ -10,6 +10,7 @@ using ShirlyStudio.Models;
 
 namespace ShirlyStudio.Controllers
 {
+    // Just admin authoried to this conroller
     [Authorize(Roles = "Admin")]
     public class CategoriesController : Controller
     {

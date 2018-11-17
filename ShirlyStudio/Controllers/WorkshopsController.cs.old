@@ -1,0 +1,433 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using ShirlyStudio.Models;
+using ShirlyStudio.Services;
+using WebApplication4.Models;
+using static ShirlyStudio.Services.WorkshopClusterService;
+
+namespace ShirlyStudio.Controllers
+{
+[Authorize(Roles = "Admin,Customer")]
+public class WorkshopsController : Controller
+{
+private readonly ShirlyStudioContext _context;
+
+public WorkshopsController(ShirlyStudioContext context)
+{
+    _context = context;
+}
+
+// GET: Workshops
+[Authorize(Roles = "Admin")]
+public async Task<IActionResult> Index()
+{
+    var shirlyStudioContext = _context.Workshop.Include(w => w.Category).Include(w => w.Teacher);
+    return View(await shirlyStudioContext.ToListAsync());
+}
+
+// GET: Workshops/Details/5
+[Authorize(Roles = "Admin")]
+public async Task<IActionResult> Details(int? id)
+{
+    if (id == null)
+    {
+        return NotFound();
+    }
+
+    var workshop = await _context.Workshop
+        .Include(w => w.Category)
+        .Include(w => w.Teacher)
+        .FirstOrDefaultAsync(m => m.WorkshopId == id);
+    if (workshop == null)
+    {
+        return NotFound();
+    }
+
+    return View(workshop);
+}
+
+// GET: Workshops/Create
+[Authorize(Roles = "Admin")]
+public IActionResult Create()
+{
+    // List of categories
+    ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryName");
+    ViewData["TeacherId"] = new SelectList(_context.Teacher, "TeacherId", "TeacherName");
+    return View();
+}
+
+// POST: Workshops/Create
+// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+[HttpPost]
+[ValidateAntiForgeryToken]
+[Authorize(Roles = "Admin")]
+public async Task<IActionResult> Create([Bind("WorkshopId,WorkshopName,CategoryId,FullData,Price,Available_Members,Description,TeacherId,Duration")] Workshop workshop)
+{
+        if (ModelState.IsValid)
+        {
+            _context.Add(workshop);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryName", workshop.CategoryId);
+        ViewData["TeacherId"] = new SelectList(_context.Teacher, "TeacherId", "TeacherName", workshop.TeacherId);
+        return View(workshop);
+}
+
+// GET: Workshops/Edit/5
+[Authorize(Roles = "Admin")]
+public async Task<IActionResult> Edit(int? id)
+{
+    if (id == null)
+    {
+        return NotFound();
+    }
+
+    var workshop = await _context.Workshop.FindAsync(id);
+    if (workshop == null)
+    {
+        return NotFound();
+    }
+    ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryName", workshop.CategoryId);
+    ViewData["TeacherId"] = new SelectList(_context.Teacher, "TeacherId", "TeacherName", workshop.TeacherId);
+    return View(workshop);
+}
+
+// POST: Workshops/Edit/5
+// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+[HttpPost]
+[ValidateAntiForgeryToken]
+[Authorize(Roles = "Admin")]
+public async Task<IActionResult> Edit(int id, [Bind("WorkshopId,WorkshopName,CategoryId,FullData,Price,Available_Members,Description,TeacherId,Duration")] Workshop workshop)
+{
+    if (id != workshop.WorkshopId)
+    {
+        return NotFound();
+    }
+
+    if (ModelState.IsValid)
+    {
+        try
+        {
+            _context.Update(workshop);
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!WorkshopExists(workshop.WorkshopId))
+            {
+                return NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+        return RedirectToAction(nameof(Index));
+    }
+    ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryName", workshop.CategoryId);
+    ViewData["TeacherId"] = new SelectList(_context.Teacher, "TeacherId", "TeacherName", workshop.TeacherId);
+    return View(workshop);
+}
+
+// GET: Workshops/Delete/5
+[Authorize(Roles = "Admin")]
+public async Task<IActionResult> Delete(int? id)
+{
+    if (id == null)
+    {
+        return NotFound();
+    }
+
+    var workshop = await _context.Workshop
+        .Include(w => w.Category)
+        .Include(w => w.Teacher)
+        .FirstOrDefaultAsync(m => m.WorkshopId == id);
+    if (workshop == null)
+    {
+        return NotFound();
+    }
+
+    return View(workshop);
+}
+
+// POST: Workshops/Delete/5
+[HttpPost, ActionName("Delete")]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> DeleteConfirmed(int id)
+{
+    var workshop = await _context.Workshop.FindAsync(id);
+    _context.Workshop.Remove(workshop);
+    await _context.SaveChangesAsync();
+    return RedirectToAction(nameof(Index));
+}
+
+private bool WorkshopExists(int id)
+{
+    return _context.Workshop.Any(e => e.WorkshopId == id);
+}
+
+[AllowAnonymous]
+public ActionResult FindAll()
+{
+    var sa = new JsonSerializerSettings();
+    var md5 = MD5.Create();
+           
+    if ((User.IsInRole("Customer")))
+    { 
+        var eventList = from e in _context.Workshop
+                        where (e.Available_Members != 0)
+                        select new
+                    {
+                            url = "/CustomerRegistrations/confirmation/?WorkshopId=" + e.WorkshopId + "&customermail=" + User.Identity.Name,
+                            id = e.WorkshopId,
+                        title = e.WorkshopName,
+                        description = e.Description,
+                        start = e.FullData.ToString(),
+                        end = e.FullData.AddHours(e.Duration).ToString(),
+                        //Genrate unique color based on category name
+                        color = '#' + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).R.ToString("X2")
+                        + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).G.ToString("X2")
+                        + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).B.ToString("X2")
+                    };
+        var rows = eventList.ToArray();
+        return Json(rows, sa);
+    }
+    else if((User.Identity.Name == null)){
+
+        var eventList = from e in _context.Workshop
+                              
+                        select new
+                        {
+                            url = "/Home/Error/?message=על מנת לקבל פרטים נוספים אודות הסדנה יש להרשם למערכת, תודה",
+                            id = e.WorkshopId,
+                            title = e.WorkshopName,
+                            description = e.Description,
+                            start = e.FullData.ToString(),
+                            end = e.FullData.AddHours(e.Duration).ToString(),
+                            //Genrate unique color based on category name
+                            color = '#' + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).R.ToString("X2")
+                            + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).G.ToString("X2")
+                            + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).B.ToString("X2")
+                        };
+        var rows = eventList.ToArray();
+        return Json(rows, sa);
+
+    }
+    else
+    {
+        var eventListWithOutIdentity = from e in _context.Workshop
+                        select new
+                        {
+                            id = e.WorkshopId,
+                            title = e.WorkshopName,
+                            description = e.Description,
+                            start = e.FullData.ToString(),
+                            end = e.FullData.AddHours(e.Duration).ToString(),
+                            color = '#' + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).R.ToString("X2")
+                            + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).G.ToString("X2")
+                            + Color.FromArgb(md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[0], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[1], md5.ComputeHash(Encoding.UTF8.GetBytes(e.Category.CategoryName))[2]).B.ToString("X2")
+                        };
+        var rows = eventListWithOutIdentity.ToArray();
+        return Json(rows, sa);
+
+    }         
+}
+    // Filter for workshop based on 3 paramaters  workshop->view
+
+     public async Task<IActionResult> Filter(string WorkshopName, int price, int available_members)
+{
+    var shirlyStudioContext = _context.Workshop.Include(w => w.Category).Include(w => w.Teacher);
+    if (WorkshopName == null && price == 0 && available_members == 0) return Json(await shirlyStudioContext.ToListAsync());
+    if (available_members == 0 && price == 0 && WorkshopName != null)
+    {
+
+        var m = await (from c in shirlyStudioContext
+                        where (c.WorkshopName.Contains(WorkshopName))
+                        orderby c.FullData
+                        select c).ToListAsync();
+        return Json(m);
+    }
+    else if (available_members == 0 && price != 0 && WorkshopName == null)
+    {
+        var q = await (from c in shirlyStudioContext
+                        where (c.Price <= price)
+                        orderby c.FullData
+                        select c).ToListAsync();
+        return Json(q);
+
+    }
+    else if (available_members == 0 && price != 0 && WorkshopName != null)
+    {
+        var q = await (from c in shirlyStudioContext
+                        where (c.Price <= price)
+                        where (c.WorkshopName.Contains(WorkshopName))
+
+                        orderby c.FullData
+                        select c).ToListAsync();
+        return Json(q);
+
+    }
+    else if (available_members != 0 && price == 0 && WorkshopName != null)
+    {
+        var q = await (from c in shirlyStudioContext
+                        where (c.Available_Members >= available_members)
+                        where (c.WorkshopName.Contains(WorkshopName))
+
+                        orderby c.FullData
+                        select c).ToListAsync();
+        return Json(q);
+    }
+    else if (available_members != 0 && price != 0 && WorkshopName == null)
+    {
+        var q = await (from c in shirlyStudioContext
+                        where (c.Available_Members >= available_members)
+                        where (c.Price <= price)
+
+                        orderby c.FullData
+                        select c).ToListAsync();
+        return Json(q);
+
+    }
+
+    else if (available_members != 0 && price == 0 && WorkshopName == null)
+    {
+        var q = await (from c in shirlyStudioContext
+                        where (c.Available_Members >= available_members)
+                        orderby c.FullData
+                        select c).ToListAsync();
+        return Json(q);
+    }
+    else
+    {
+        var q = await (from c in shirlyStudioContext
+                        where (c.Available_Members >= available_members)
+                        where (c.Price <= price)
+                        where (c.WorkshopName.Contains(WorkshopName))
+                        orderby c.FullData
+                        select c).ToListAsync();
+        return Json(q);
+    }
+}
+        
+//For graphs
+[HttpGet]
+public JsonResult GetWorkshopesSortedByDate()
+{
+    return Json(_context.Workshop.OrderBy(n => n.FullData).ToList());
+}
+
+
+//GroupBy function
+[HttpGet]
+public JsonResult Groupby()
+{
+    var query = from r in _context.CustomerRegistration
+                group r.CustomerRegistrationId by r.Workshop.WorkshopName into g
+                select new
+                {
+                    workshopName = g.Key,
+                    Count = g.Count()
+                };
+    return Json(query.OrderByDescending(c=>c.Count).Take(5));
+}
+
+ // AI - KMEANS clustering algo by k=3
+[HttpGet]
+public JsonResult Related(int? id)
+{
+    //Getting The detailed workshop
+    var workshop = _context.Workshop.Find(id);
+    //(cache) Check if already have previos prediction
+    var clusterResult = _context.ClusterResulter
+        .Where(b => b.WokshopId == id)
+        .FirstOrDefault();
+    IQueryable<ClusterResulter> crs;
+
+    if (clusterResult != null)
+    {
+        //create list of recomandation for join Recomandation 
+        crs = _context.ClusterResulter.Where(b => b.ClusterRes == clusterResult.ClusterRes);
+    }
+    else
+    {
+        //Create Dataset file from all the workshops Using ClusterService
+        WorkshopClusterService workshopService = new WorkshopClusterService(_context);
+        workshopService.PreproccessingAllWorkshops();
+
+        //Clear DB before retrain
+        var rows = from o in _context.ClusterResulter
+                    select o;
+        foreach (var row in rows)
+        {
+            _context.ClusterResulter.Remove(row);
+        }
+        _context.SaveChanges();
+        //_context.ClusterResulter.RemoveRange();
+        //_context.SaveChanges();
+
+        //Train Modal
+        WorkshopClustering bc = new WorkshopClustering();
+
+
+        //Get all Books
+        var workshops = _context.Workshop.ToList(); 
+        //Predict for each Workshop and create DB ClusterResulter
+        foreach (Workshop ws in workshops)
+        {
+            //Preparing ClusterResulter for DB
+            ClusterResulter cr = new ClusterResulter();
+
+            //ADding BookID to ClusterResulter
+            cr.WokshopId = ws.WorkshopId;
+
+            // Prepare BookItem as BookData (featuresSet)
+            WorkshopData wd = workshopService.CreateDataObject(ws);
+
+            //Train & Predict
+            ClusterPrediction cp = bc.Predict(wd);
+            cr.ClusterRes = Convert.ToInt32(cp.PredictedClusterId);
+
+            //Save Result in DB
+            _context.ClusterResulter.Add(cr);
+        }
+        _context.SaveChanges();
+
+        //Get Book Prediction Class
+        ClusterPrediction cp_final = bc.Predict(workshopService.CreateDataObject(workshop));
+        int predId = Convert.ToInt32(cp_final.PredictedClusterId);
+
+        //Get relevant predictions
+        crs = _context.ClusterResulter
+            .Where(b => b.ClusterRes == predId);
+    }
+
+    var recomended = from bk in _context.Workshop
+                        join cr in crs on bk.WorkshopId equals cr.WokshopId
+                        where cr.WokshopId != id
+                        select new
+                        {
+                            Id = bk.WorkshopId,
+                            Name = bk.WorkshopName,
+                            Price = bk.Price,
+                            Category = bk.Category,
+                            Result = cr.ClusterRes
+                        };
+
+    return Json(recomended);
+}
+}
+}
+

@@ -30,8 +30,7 @@ namespace WebApplication4.Models
         public String PhoneNumber { get; set; }
 
 
+        //Many customerResgestration to one customer
         public virtual ICollection<CustomerRegistration> CustomerRegistration { get; set; }
-
-
     }
 }

@@ -11,10 +11,11 @@ namespace ShirlyStudio.Models
     {
         [Key]
         public int CategoryId { get; set; }
-
+        
         [Required]
         [Display(Name = "שם קטגוריה")]
         public String CategoryName { get; set; }
+        // One category for many workshops
         public virtual ICollection<Workshop> Workshops { get; set; }
 
     }

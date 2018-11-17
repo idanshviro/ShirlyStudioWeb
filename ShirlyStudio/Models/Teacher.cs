@@ -17,6 +17,7 @@ namespace WebApplication4.Models
         [Display(Name = "שם מלא")]
         public String TeacherName { get; set; }
 
+        // One teacher to many workahops
         [Display(Name = "סדנאות")]
         public ICollection<Workshop> Workshops { get; set; }
     }

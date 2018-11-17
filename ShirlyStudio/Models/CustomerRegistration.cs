@@ -8,6 +8,7 @@ namespace ShirlyStudio.Models
 {
     public class CustomerRegistration
     {
+        //Implement many to many relationship
         public int CustomerRegistrationId { get; set; }
         public int WorkshopId { get; set; }
         public int CustomerId { get; set; }

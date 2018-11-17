@@ -134,7 +134,7 @@
             {
                 type: "Get",
                 dataType: "json",
-                url: "/Workshops/GetRecordsMonthly",
+                url: "/Workshops/GetWorkshopesSortedByDate",
                 success: function (data) {
                     //    console.log(data);
                     var ctx = document.getElementById('prices_chart').getContext('2d');
@@ -241,7 +241,7 @@
             {
                 type: "Get",
                 dataType: "json",
-                url: "/Workshops/Getfreeplace",
+                url: "/Workshops/GetWorkshopesSortedByDate",
                 success: function (data) {
                     //     console.log(data);
                     // var ctx = document.getElementById('myChart2').getContext('2d');
@@ -392,7 +392,7 @@
             <th>
                 מספר רישומים
             </th>
-            <th></th>
+            
         </tr>
     </thead>
     <tbody id="join"></tbody>
