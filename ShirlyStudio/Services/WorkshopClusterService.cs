@@ -45,7 +45,7 @@ namespace ShirlyStudio.Services
             float time = (float)((double)ws.FullData.Hour + (double)ws.FullData.Minute*0.01);
             float teacher = (float)ws.TeacherId;
 
-            //[ genre, date , price ] featuresSet
+            //[ price, duration, day, time, teacher ] featuresSet
             double[] temp = { price, duration, day, time, teacher};
             return string.Join(",", temp);
             
@@ -69,7 +69,7 @@ namespace ShirlyStudio.Services
 
         public WorkshopData CreateDataObject(Workshop ws)
         {
-            // Prepare BookItem as BookData (featuresSet)
+            // Prepare WorkshopItem as WorkshopData (featuresSet)
             string convertedData = WorkshopToVector(ws);
             List<string> WorkshopFeaturesSet = convertedData.Split(',').ToList();
             return new WorkshopData
@@ -120,9 +120,8 @@ namespace ShirlyStudio.Services
             private static PredictionModel<WorkshopData, ClusterPrediction> Train()
             {
                 var pipeline = new LearningPipeline();
-                // pipeline.Add(new TextLoader(_dataPath).CreateFrom<BookData>(separator: ','));
-
-                //building dataset of BookData
+     
+                //building dataset of WorkshopData
                 List<WorkshopData> data = new List<WorkshopData>();
                 string line;
                 using (var reader = File.OpenText(_dataPath))
@@ -131,7 +130,7 @@ namespace ShirlyStudio.Services
                     {
                         string convertedData = line;
                         List<string> WorkshopFeaturesSet = convertedData.Split(',').ToList();
-                        WorkshopData bd = new WorkshopData
+                        WorkshopData wd = new WorkshopData
                         {
                             price = float.Parse(WorkshopFeaturesSet[0]), 
                             duration = float.Parse(WorkshopFeaturesSet[1]),
@@ -139,7 +138,7 @@ namespace ShirlyStudio.Services
                             time = float.Parse(WorkshopFeaturesSet[3]),
                             teacher = float.Parse(WorkshopFeaturesSet[4])
                         };
-                        data.Add(bd);
+                        data.Add(wd);
                     }
                 }
 

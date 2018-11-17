@@ -37,16 +37,18 @@
         </di>
     </dl>
 
-    @*Pass viewBag keys as parameters to Confirmatiom Post function in the controller*@
+
     <form asp-action="Confirmation">
         <input type="hidden" value="@ViewBag.WorkshopId" name="WorkshopId" />
         <input type="hidden" value="@ViewBag.CustomerId" name="CustomerId" />
         <input type="submit" value="הרשם" class="btn btn-info" /> |
-        <a asp-action="MyIndex">חזרה לרשימת הקטגוריות</a>
-
+        <form asp-action="MyIndex">
+            <button class="btn btn-info">חזרה לרישומים שלי</button>
+        </form>
     </form>
 </div>
 
+<h2> סדנאות נוספות שעשויות לעניין אותך</h2>
 </br></br>
 <table class="table table-striped table-bordered table-hover">
     <thead>
@@ -61,7 +63,7 @@
                 קטגוריה
             </th>
             <th>
-                לרישום
+                רישום לסדנאות
             </th>
         </tr>
     </thead>
@@ -73,7 +75,7 @@
     <script>
         function getRelatedWorkshops() {
             var urlParams = getJsonFromUrl();
-            //console.log('../../../Workshops/Related/' + urlParams.WorkshopId)
+           
             $.ajax({
                 url: '../../Workshops/Related/' + urlParams.WorkshopId,
                 type: 'GET',
@@ -90,6 +92,7 @@
         }
         function goto(id) {
             var urlParams = getJsonFromUrl();
+    
             var url = location.origin + location.pathname + "?WorkshopId=" + id + "&customermail=" + urlParams.customermail;
             window.location.replace(url);
         }

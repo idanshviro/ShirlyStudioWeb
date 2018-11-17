@@ -18,17 +18,20 @@ namespace ShirlyStudio.Controllers
         {
             _context = context;
         }
-
-        //Filter on CustomerRegestration with Ajax working with customerRegestration -> Index
+        //filter on customerRegistration with ajax working with customerRegistetion->index
         [HttpGet]
         public async Task<IActionResult> Filterregistration(string teacher, string wname,string cname)
         {
             var shirlyStudioContext =_context.CustomerRegistration.Include(w => w.Customer).Include(w => w.Workshop).Include(w => w.Workshop.Category).Include(w => w.Workshop.Teacher);
+            
+            
             if (teacher == null && wname == null && cname == null) return Json(await shirlyStudioContext.ToListAsync());
+
             if (cname == null && wname == null && teacher != null)
             {
 
                 var m = await (from c in shirlyStudioContext
+         
                                where (c.Workshop.Teacher.TeacherName.Contains(teacher))
                                orderby c.Workshop.FullData
                                select c).ToListAsync();
@@ -37,6 +40,7 @@ namespace ShirlyStudio.Controllers
             else if (cname == null && wname != null && teacher == null)
             {
                 var q = await (from c in shirlyStudioContext
+        
                                where (c.Workshop.WorkshopName.Contains(wname))
                                orderby c.Workshop.FullData
                                select c).ToListAsync();
@@ -46,6 +50,7 @@ namespace ShirlyStudio.Controllers
             else if (cname ==null && wname != null && teacher != null)
             {
                 var q = await (from c in shirlyStudioContext
+         
                                where (c.Workshop.WorkshopName.Contains(wname))
                                where (c.Workshop.Teacher.TeacherName.Contains(teacher))
 
@@ -56,7 +61,9 @@ namespace ShirlyStudio.Controllers
             }
             else if (cname != null && wname == null && teacher != null)
             {
+         
                 var q = await (from w in shirlyStudioContext
+        
                                where (w.Customer.CustomerName.Contains(cname)) 
                                where (w.Workshop.Teacher.TeacherName.Contains(teacher))
 
@@ -67,6 +74,7 @@ namespace ShirlyStudio.Controllers
             else if (cname != null && wname != null && teacher == null)
             {
                 var q = await (from w in shirlyStudioContext
+         
                                where (w.Customer.CustomerName.Contains(cname))
                                where (w.Workshop.WorkshopName.Contains(wname))
 
@@ -79,6 +87,7 @@ namespace ShirlyStudio.Controllers
             else if (cname != null && wname == null && teacher == null)
             {
                 var q = await (from c in shirlyStudioContext
+         
                                where (c.Customer.CustomerName.Contains(cname))
 
                                orderby c.Customer.CustomerName
@@ -110,13 +119,13 @@ namespace ShirlyStudio.Controllers
         }
 
         [HttpGet]
-     
-        // list of CustomerRegestration per loged in customer
+     //list of customerRegistaration of the logged in customer
         public async Task<IActionResult> MyIndex()
         {
             var Customer = from c in _context.CustomerRegistration.Include(c => c.Customer).Include(c => c.Workshop).Include(c => c.Workshop.Teacher).Include(c => c.Workshop.Category)
                            where (c.Customer.Email.Equals(User.Identity.Name))
                            select c;
+           
             return View(await Customer.ToListAsync());
         }
 
@@ -138,7 +147,7 @@ namespace ShirlyStudio.Controllers
             {
                 return NotFound();
             }
-            // generate key-values of customerRegestration details
+            //generate key-values of CustomerRgistration details
             ViewData["WorkshopName"] = customerRegistration.Workshop.WorkshopName;
             ViewData["CustomerName"] = customerRegistration.Customer.CustomerName;
             ViewData["Time"] = customerRegistration.Workshop.FullData.Day + "/" + customerRegistration.Workshop.FullData.Month + "/" + customerRegistration.Workshop.FullData.Year 
@@ -149,7 +158,7 @@ namespace ShirlyStudio.Controllers
             ViewData["Category"] = customerRegistration.Workshop.Category.CategoryName;
             return View(customerRegistration);
         }
-        //List of my regestration
+        //details of specific registration of mine
         public async Task<IActionResult> MyDetails(int? Id)
         {
             if (Id == null)
@@ -201,6 +210,7 @@ namespace ShirlyStudio.Controllers
                            where (c.Email.Equals(customermail))
                            select c;
 
+            // return Json(m);
             ViewData["WorkshopName"] = Workshop.First().WorkshopName;
             ViewData["CustomerId"] = Customer.First().CustomerId;
             ViewData["CustomerName"] = Customer.First().CustomerName;
@@ -219,24 +229,30 @@ namespace ShirlyStudio.Controllers
             var Registration = from R in _context.CustomerRegistration
                            where ((R.WorkshopId.Equals(customerRegistration.WorkshopId))&(R.CustomerId.Equals(customerRegistration.CustomerId)))
                            select R;
-            //we check that the specific customer is not registerd to the specific workshop
+            //we cheack that the specific customer is not registerd to the specific workshop
             if  (!Registration.Any())
             {
                 if (ModelState.IsValid)
                 {
+                   
+
                     _context.Add(customerRegistration);
-                    // Update avialable members counter
+                    //update availabe members counter
                     var Workshop = from R in _context.Workshop.Include(w => w.Category).Include(w => w.Teacher)
                                    where (R.WorkshopId.Equals(customerRegistration.WorkshopId))
                                        select R;
                         Workshop.First().Available_Members = Workshop.First().Available_Members - 1;
                       _context.Workshop.Update(Workshop.First());
 
-                        await _context.SaveChangesAsync();
-                    //Redirect to the Regestration index
+                    await _context.SaveChangesAsync();
+
+
+                   //redirect to registration index
                     return RedirectToAction(nameof(MyIndex));
                 }
+            
                  return RedirectToAction("Index","Home");
+         
             }
             else
             {

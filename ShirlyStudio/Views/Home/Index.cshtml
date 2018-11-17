@@ -34,6 +34,8 @@ else
 <script src='../js/bas.js'></script>
 <script src='../js/OrbitControls-2.js'></script>
 <script src="../js/index.js"></script>
+<script src='~/js/CustomCalander.js'></script>
+<script src='~/js/WeatherWebService.js'></script>
 <link href="~/css/index.css" rel="stylesheet" />
 
 
@@ -43,7 +45,6 @@ else
 </head>
 <link href="~/css/index.css" rel="stylesheet" />
 
-<body>
 <header class="masthead text-center text-white d-flex">
     <div class="container my-auto">
         <div class="row">
@@ -83,219 +84,119 @@ else
                 <p>
                     @* This is a web service weather *@
                     <div id="showWeatherForcast"></div>
-                    <script type="text/javascript">
 
-
-                        $(document).ready(function () {
-
-
-                            var city = 'rishon lezion';
-                            var key = 'f5a9dcc0f6833e86ac420e23ee102d20';
-                            $.ajax({
-                                url: 'https://api.openweathermap.org/data/2.5/weather',
-                                dataType: 'json',
-                                type: 'GET',
-                                data: { q: city, appid: key, units: 'metric' },
-
-                                success: function (data) {
-                                    var wf = '';
-                                    $.each(data.weather, function (index, val) {
-                                        wf += '<p><b>' + data.name + "</b><img src= https://openweathermap.org/img/w/" + val.icon + ".png></p>" +
-                                            data.main.temp + '&deg;C ' + ' | ' + val.main + ',' + val.description
-                                        if (val.description == "moderate rain" || val.description == "shower rain" || val.description == "rain" || val.description == "thunderstorm" || val.description == "snow" || val.description == "mist" || val.description == "thunderstorm with rain") {
-                                            wf += '  - Due to an extreame weather no class for today :( ';
-
-                                        }
-                                        else { wf += '  - A wondarful weather for art ! :)' }
-                                    });
-                                    $("#showWeatherForcast").html(wf);
-                                }
-
-
-                            })
-
-
-                        }
-                        )
-
-
-
-                    </script>
                 </p>
                 <hr class="my-4">
             </div>
         </div>
     </div>
 
-    <script>
-        function formatDate(date) {
-            var d = new Date(date),
-                month = '' + (d.getMonth() + 1),
-                day = '' + d.getDate(),
-                year = d.getFullYear();
-
-            if (month.length < 2) month = '0' + month;
-            if (day.length < 2) day = '0' + day;
-
-            return [year, month, day].join('-');
-        }
-
-
-
-        jq223(document).ready(function () {
-            var today = new Date();
-            var dd = today.getDate();
-            var mm = today.getMonth() + 1; //January is 0!
-            var yyyy = today.getFullYear();
-
-            if (dd < 10) {
-                dd = '0' + dd
-            }
-
-            if (mm < 10) {
-                mm = '0' + mm
-            }
-
-            today = yyyy + '-' + mm + '-' + dd;
-
-            jq223('#calendar').fullCalendar({
-                header: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'month,basicWeek,basicDay'
-                },
-
-                defaultDate: today,
-                themeSystem: 'bootstrap4',
-                navLinks: true, // can click day/week names to navigate views
-                editable: false,
-                eventLimit: true, // allow "more" link when too many events
-                events: '/workshops/Findall'
-            });
-
-        });</script>
-    <style>
-
-
-
-        body {
-            margin: 40px 10px;
-            padding: 0;
-            font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-            font-size: 14px;
-        }
-
-        #calendar {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-    </style>
     <p>
         <div id='calendar'></div>
+       
     </p>
-</section>
-<section class="bg-primary" id="facebook">
-    <div id="fb-root"></div>
-    <h2 class="section-heading text-white">עמוד הפייסבוק שלנו</h2>
-    <hr class="light my-4" id="line-white">
-    <script>
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = 'https://connect.facebook.net/he_IL/sdk.js#xfbml=1&version=v3.1';
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));</script>
+        </section>
+        <section class="bg-primary" id="facebook">
+            <div id="fb-root"></div>
+            <h2 class="section-heading text-white">עמוד הפייסבוק שלנו</h2>
+            <hr class="light my-4" id="line-white">
+            <script>
+                (function (d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) return;
+                    js = d.createElement(s); js.id = id;
+                    js.src = 'https://connect.facebook.net/he_IL/sdk.js#xfbml=1&version=v3.1';
+                    fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));</script>
 
 
-    <div class="fb-page" data-href="https://www.facebook.com/StudioShirly/" data-tabs="timeline" data-width="500" data-height="800" data-small-header="false" data-adapt-container-width="false" data-hide-cover="false" data-show-facepile="false"><blockquote cite="https://www.facebook.com/StudioShirly/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/StudioShirly/">‏שירלי מרכז אומנויות‏</a></blockquote></div>
-</section>
+            <div class="fb-page" data-href="https://www.facebook.com/StudioShirly/" data-tabs="timeline" data-width="500" data-height="800" data-small-header="false" data-adapt-container-width="false" data-hide-cover="false" data-show-facepile="false"><blockquote cite="https://www.facebook.com/StudioShirly/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/StudioShirly/">‏שירלי מרכז אומנויות‏</a></blockquote></div>
+        </section>
 
-    
-<!------ Call to the rotating pictures ---------->
- <div id="three-container"></div>
-    
+        <!------ Call to the rotating pictures ---------->
+        <div id="three-container"></div>
 
-<section id="video">
-    <center>
-        <div class='youtube_codegena' id='ESG7XlAyyDU' data-params='?&theme=dark&autohide=2&modestbranding=1&rel=0&start=7' src='https://i.postimg.cc/kGwNVdGk/1.jpg' style='width:1000px; height:500px;'></div>
-        <script src='https://rawgit.com/shaneapen/Async-Youtube-Player/master/async_youtube_player.js'></script><div style='font-size: 0.8em'></div>
-    </center>
-</section>
-<section id="contact">
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <!------ Include the above in your HEAD tag ---------->
-    <section id="contact">
-        <div class="container">
-            <div class="well well-sm">
-                <h3><strong>Contact Us</strong></h3>
-            </div>
-            <div class="row">
-                <div class="col-md-7">
+        <section id="video">
+           
+            <center>
+             
+                <div class='youtube_codegena' id='ESG7XlAyyDU' data-params='?&theme=dark&autohide=2&modestbranding=1&rel=0&start=7' src='https://i.postimg.cc/kGwNVdGk/1.jpg' style='width:1000px; height:500px;'></div>
+                <script src='https://rawgit.com/shaneapen/Async-Youtube-Player/master/async_youtube_player.js'></script><div style='font-size: 0.8em'></div>
+            </center>
+        </section>
+        <section id="contact">
+            <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.css" rel="stylesheet" id="bootstrap-css">
+            <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+            <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+            <!------ Include the above in your HEAD tag ---------->
+            <section id="contact">
+                <div class="container">
+                    <div class="well well-sm">
+                        <h3><strong>צור קשר</strong></h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-7">
 
-                    <div id="dvMap" style="height:300px;"></div>
-                    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-                    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyD823nr5pZro96G_KOEBem3d1g3ORSQZ60&callback=initMap" async defer></script>
-                    <script>
-                        var infowindow = new google.maps.InfoWindow({
-                            content: contentString
-                        });
-                        function initMap() {
-                            //map..
-                            var map = new google.maps.Map(document.getElementById('dvMap'), {
-                                center: {
-                                    lat: 31.994938,
-                                    lng: 34.767188
-                                },
-                                zoom: 16
-                            });
-                            //marker..
-                            var marker = new google.maps.Marker({
-                                position: {
-                                    lat: 31.994938,
-                                    lng: 34.767188
-                                },
-                                clickable: true,
-                                map: map,
-                                draggable: false
-                            });
-                            marker.addListener('click', function () {
-                                infowindow.open(map, marker);
-                            });
+                            <div id="dvMap" style="height:300px;"></div>
+                            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+                            <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyD823nr5pZro96G_KOEBem3d1g3ORSQZ60&callback=initMap" async defer></script>
+                            <script>
+                                var infowindow = new google.maps.InfoWindow({
+                                    content: contentString
+                                });
+                                function initMap() {
+                                    //map..
+                                    var map = new google.maps.Map(document.getElementById('dvMap'), {
+                                        center: {
+                                            lat: 31.994938,
+                                            lng: 34.767188
+                                        },
+                                        zoom: 16
+                                    });
+                                    //marker..
+                                    var marker = new google.maps.Marker({
+                                        position: {
+                                            lat: 31.994938,
+                                            lng: 34.767188
+                                        },
+                                        clickable: true,
+                                        map: map,
+                                        draggable: false
+                                    });
+                                    marker.addListener('click', function () {
+                                        infowindow.open(map, marker);
+                                    });
 
-                            //function to show  a note when clicking on the location
-                            var infowindow = new google.maps.InfoWindow({
-                                content: "שירלי מרכז אומנויות"
-                            });
+                                    //function to show  a note when clicking on the location
+                                    var infowindow = new google.maps.InfoWindow({
+                                        content: "שירלי מרכז אומנויות"
+                                    });
 
-                            google.maps.event.addListener(marker, 'click', function () {
-                                infowindow.open(map, marker);
-                            });
-                        }</script>
+                                    google.maps.event.addListener(marker, 'click', function () {
+                                        infowindow.open(map, marker);
+                                    });
+                                }</script>
+                        </div>
+                        <div class="col-md-5">
+                            <h4><strong>כתבו לנו</strong></h4>
+                            <form>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="" value="" placeholder="שם מלא">
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control" name="" value="" placeholder="כתובת מייל">
+                                </div>
+                                <div class="form-group">
+                                    <input type="tel" class="form-control" name="" value="" placeholder="מספר פלאפון">
+                                </div>
+                                <div class="form-group">
+                                    <textarea class="form-control" name="" rows="3" placeholder="הודעה"></textarea>
+                                </div>
+                                <button class="btn btn-default" type="submit" name="button">
+                                    <i class="fa fa-paper-plane-o" aria-hidden="true"></i> שלח
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-5">
-                    <h4><strong>Get in Touch</strong></h4>
-                    <form>
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="" value="" placeholder="Name">
-                        </div>
-                        <div class="form-group">
-                            <input type="email" class="form-control" name="" value="" placeholder="E-mail">
-                        </div>
-                        <div class="form-group">
-                            <input type="tel" class="form-control" name="" value="" placeholder="Phone">
-                        </div>
-                        <div class="form-group">
-                            <textarea class="form-control" name="" rows="3" placeholder="Message"></textarea>
-                        </div>
-                        <button class="btn btn-default" type="submit" name="button">
-                            <i class="fa fa-paper-plane-o" aria-hidden="true"></i> Submit
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-    </body>
+            </section>

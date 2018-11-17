@@ -26,7 +26,7 @@ namespace ShirlyStudio.Areas.Identity.Pages.Account.Manage
             _signInManager = signInManager;
             _emailSender = emailSender;
         }
-
+        [Display(Name = "שם משתמש")]
         public string Username { get; set; }
 
         public bool IsEmailConfirmed { get; set; }
@@ -41,10 +41,11 @@ namespace ShirlyStudio.Areas.Identity.Pages.Account.Manage
         {
             [Required]
             [EmailAddress]
+            [Display(Name = "כתובת מייל")]
             public string Email { get; set; }
 
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = "מספר פלאפון")]
             public string PhoneNumber { get; set; }
         }
 
@@ -109,7 +110,7 @@ namespace ShirlyStudio.Areas.Identity.Pages.Account.Manage
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "הפרופיל עודכן";
             return RedirectToPage();
         }
 

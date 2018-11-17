@@ -9,8 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using ShirlyStudio.Models;
 
 namespace ShirlyStudio.Controllers
-{
-    // Just admin authoried to this conroller
+{ //only admin authorize to this controller
     [Authorize(Roles = "Admin")]
     public class CategoriesController : Controller
     {
