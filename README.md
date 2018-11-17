@@ -1,3 +1,3 @@
 # Shirly's Studio website
 
-<div style="width:100%;height:0;padding-bottom:56%;position:relative;"><iframe src="https://giphy.com/embed/82AkiS8xk4HDz91a4t" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/82AkiS8xk4HDz91a4t">via GIPHY</a></p>
+<a href="https://giphy.com/embed/82AkiS8xk4HDz91a4t"><img src="https://media.giphy.com/media/82AkiS8xk4HDz91a4t/giphy.gif" title="made at imgflip.com"/></a>
