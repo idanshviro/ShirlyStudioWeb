@@ -1,5 +1,5 @@
 # Shirly's Studio website
-This Website was built with ASP.NET Core 2.1 MVC (Multi-Page Application) for the artist Shirly Shviro.
+This website was built with ASP.NET Core 2.1 MVC (Multi-Page Application) for the artist Shirly Shviro.
 
 ### Overview: ###
 
